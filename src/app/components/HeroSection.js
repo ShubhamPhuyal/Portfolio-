@@ -212,6 +212,12 @@ const HeroSection = ({ motionRef, cardRef }) => {
     let frameDelta = 1000 / 60
     const maxScrollSurfaceVelocity = 8
     const touchOptions = { passive: false }
+    const handleTouchMove = (event) => {
+      if (mouse.button === 0) mouse.mousemove(event)
+    }
+    const handleTouchEnd = (event) => {
+      if (mouse.button === 0) mouse.mouseup(event)
+    }
 
     const updateStageAndSurface = () => {
       const anchorRect = stageAnchor.getBoundingClientRect()
@@ -299,8 +305,9 @@ const HeroSection = ({ motionRef, cardRef }) => {
     stage.removeEventListener('touchend', mouse.mouseup)
     window.addEventListener('mousemove', mouse.mousemove)
     window.addEventListener('mouseup', mouse.mouseup)
-    window.addEventListener('touchmove', mouse.mousemove, touchOptions)
-    window.addEventListener('touchend', mouse.mouseup, touchOptions)
+    window.addEventListener('touchmove', handleTouchMove, touchOptions)
+    window.addEventListener('touchend', handleTouchEnd, touchOptions)
+    window.addEventListener('touchcancel', handleTouchEnd, touchOptions)
 
     const tick = (time) => {
       const delta = Math.min(time - lastTime, physicsStep * maxPhysicsSteps)
@@ -345,8 +352,9 @@ const HeroSection = ({ motionRef, cardRef }) => {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('mousemove', mouse.mousemove)
       window.removeEventListener('mouseup', mouse.mouseup)
-      window.removeEventListener('touchmove', mouse.mousemove, touchOptions)
-      window.removeEventListener('touchend', mouse.mouseup, touchOptions)
+      window.removeEventListener('touchmove', handleTouchMove, touchOptions)
+      window.removeEventListener('touchend', handleTouchEnd, touchOptions)
+      window.removeEventListener('touchcancel', handleTouchEnd, touchOptions)
       stage.removeEventListener('wheel', mouse.mousewheel)
       Mouse.clearSourceEvents(mouse)
       World.clear(engine.world, false)
@@ -398,7 +406,7 @@ const HeroSection = ({ motionRef, cardRef }) => {
         </p>
 
         <h1
-          className="mt-4 max-w-4xl text-[62px] leading-[1] font-semibold tracking-[-1px] text-[#111111] sm:mt-5"
+          className="mt-4 max-w-4xl text-[32px] leading-[1.05] font-semibold tracking-[-0.04em] text-[#111111] sm:mt-5 sm:text-[62px] sm:leading-[1] sm:tracking-[-1px]"
           style={{ fontFamily: '"Mdnichrometest", Arial, sans-serif' }}
         >
           I&apos;m a Product &amp; Visual
