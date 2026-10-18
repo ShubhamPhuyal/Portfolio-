@@ -94,13 +94,13 @@ const StackSection = ({ heroRef, cardRef }) => {
           willChange: 'transform',
         }}
       >
-        <div className="mx-auto w-full max-w-7xl px-5 pt-10 pb-0 text-center sm:px-10 lg:px-14">
-          <p className="mb-8 text-[19px] font-medium tracking-[-1px] text-black sm:mb-10">
+        <div className="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:px-10 sm:py-10 lg:px-14">
+          <p className="mb-5 text-base font-medium tracking-[-0.04em] text-black sm:mb-10 sm:text-[19px] sm:tracking-[-1px]">
             A BIT ABOUT ME
           </p>
           <p
             ref={paragraphRef}
-            className="mx-auto max-w-6xl text-[54px] leading-[1.05] font-bold tracking-[-0.055em]"
+            className="mx-auto max-w-6xl text-[24px] leading-[1.1] font-bold tracking-[-0.045em] sm:text-[36px] sm:leading-[1.05] sm:tracking-[-0.055em] lg:text-[54px]"
             style={{ fontFamily: '"Mdnichrometest Dark", Arial, sans-serif' }}
             aria-label={ABOUT_LABEL}
           >

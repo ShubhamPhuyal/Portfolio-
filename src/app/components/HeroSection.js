@@ -406,7 +406,7 @@ const HeroSection = ({ motionRef, cardRef }) => {
         </p>
 
         <h1
-          className="mt-4 max-w-4xl text-[32px] leading-[1.05] font-semibold tracking-[-0.04em] text-[#111111] sm:mt-5 sm:text-[62px] sm:leading-[1] sm:tracking-[-1px]"
+          className="mt-4 max-w-5xl text-[32px] leading-[1.05] font-semibold tracking-[-0.04em] text-[#111111] sm:mt-5 sm:text-[80px] sm:leading-[1] sm:tracking-[-1px]"
           style={{ fontFamily: '"Mdnichrometest", Arial, sans-serif' }}
         >
           I&apos;m a Product &amp; Visual
