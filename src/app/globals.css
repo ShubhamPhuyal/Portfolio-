@@ -94,6 +94,17 @@ h6 {
   margin-right: clamp(-6rem, -5vw, -2rem);
 }
 
+.pricing-featured-shell {
+  --pricing-featured-color: #ff5500;
+  background:
+    radial-gradient(circle at 16px 16px, var(--pricing-featured-color) 15px, transparent 16px) top left / 32px 32px repeat-x,
+    radial-gradient(circle at 16px 16px, var(--pricing-featured-color) 15px, transparent 16px) bottom left / 32px 32px repeat-x,
+    radial-gradient(circle at 16px 16px, var(--pricing-featured-color) 15px, transparent 16px) top left / 32px 32px repeat-y,
+    radial-gradient(circle at 16px 16px, var(--pricing-featured-color) 15px, transparent 16px) top right / 32px 32px repeat-y,
+    linear-gradient(var(--pricing-featured-color), var(--pricing-featured-color)) center / calc(100% - 32px) calc(100% - 32px) no-repeat;
+  padding: 16px;
+}
+
 @keyframes footer-sticker-float {
   0%,
   100% {

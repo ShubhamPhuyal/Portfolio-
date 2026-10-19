@@ -22,29 +22,36 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import NextImage from 'next/image'
 
 const WORKS = [
-  { name: 'PROJECT ONE', category: 'PRODUCT DESIGN', mark: '1', markColor: '#f6d6e7', image: '/nestsms.png', href: '#' },
-  { name: 'PROJECT TWO', category: 'BRAND IDENTITY', mark: '2', markColor: '#315eea', image: '/nestsms.png', href: '#' },
-  { name: 'PROJECT THREE', category: 'DIGITAL EXPERIENCE', mark: '3', markColor: '#ff6a3d', image: '/nestsms.png', href: '#' },
-  { name: 'PROJECT FOUR', category: 'PRODUCT DESIGN', mark: '4', markColor: '#6941c6', image: '/nestsms.png', href: '#' },
-  { name: 'PROJECT FIVE', category: 'BRAND IDENTITY', mark: '5', markColor: '#197b5b', image: '/nestsms.png', href: '#' },
-  { name: 'PROJECT SIX', category: 'DIGITAL EXPERIENCE', mark: '6', markColor: '#d73d2e', image: '/nestsms.png', href: '#' },
+  { name: 'PROJECT ONE', category: 'PRODUCT DESIGN', mark: '1', markColor: '#f6d6e7', image: '/work/CPT2610191657-1667x763%20(1).gif', poster: '/work/CPT2610191657-1667x763%20(1).poster.png', href: '#' },
+  { name: 'PROJECT TWO', category: 'BRAND IDENTITY', mark: '2', markColor: '#315eea', image: '/work/CPT2610191658-1377x623%20(1).gif', poster: '/work/CPT2610191658-1377x623%20(1).poster.png', href: '#' },
+  { name: 'PROJECT THREE', category: 'DIGITAL EXPERIENCE', mark: '3', markColor: '#ff6a3d', image: '/work/CPT2610191659-1521x692%20(1).gif', poster: '/work/CPT2610191659-1521x692%20(1).poster.png', href: '#' },
 ]
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
 const PREVIEW_ASPECT_RATIO = 1902 / 864
 
-/* ------------------------------------------------------------------ */
-/* Textures                                                            */
-/* ------------------------------------------------------------------ */
+const waitForImage = (image) => new Promise((resolve, reject) => {
+  if (image.complete && image.naturalWidth > 0) {
+    resolve(image)
+    return
+  }
 
-const loadSource = (work) =>
-  new Promise((resolve, reject) => {
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.onload = () => resolve(img)
-    img.onerror = reject
-    img.src = work.image
-  })
+  const cleanup = () => {
+    image.removeEventListener('load', onLoad)
+    image.removeEventListener('error', onError)
+  }
+  const onLoad = () => {
+    cleanup()
+    resolve(image)
+  }
+  const onError = () => {
+    cleanup()
+    reject(new Error(`Failed to load project preview: ${image.currentSrc || image.src}`))
+  }
+
+  image.addEventListener('load', onLoad, { once: true })
+  image.addEventListener('error', onError, { once: true })
+})
 
 /* ------------------------------------------------------------------ */
 /* WebGL liquid renderer (single context, no dependencies)             */
@@ -180,6 +187,7 @@ function createLiquid(canvas) {
   return {
     makeTexture(source) {
       const tex = gl.createTexture()
+      if (!tex) return null
       gl.bindTexture(gl.TEXTURE_2D, tex)
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
@@ -189,7 +197,12 @@ function createLiquid(canvas) {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
       const w = source.naturalWidth || source.width
       const h = source.naturalHeight || source.height
-      return { tex, ratio: w / h }
+      return { tex, ratio: w / h, source }
+    },
+    updateTexture(texture) {
+      gl.bindTexture(gl.TEXTURE_2D, texture.tex)
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.source)
     },
     draw(t, s) {
       const aspect = canvas.width / canvas.height
@@ -374,6 +387,7 @@ const Works = () => {
         let cursor = null
         let raf = 0
         let last = 0
+        let lastTextureUpdate = 0
         let tex = null
         const texCache = []
 
@@ -412,12 +426,26 @@ const Works = () => {
           canvas.height = Math.max(2, Math.round(cur.media.clientHeight * dpr))
         }
 
-        const getTex = (i) => {
-          if (!liquid) return Promise.resolve(null)
-          texCache[i] ??= loadSource(WORKS[i])
-            .then((src) => liquid.makeTexture(src))
-            .catch(() => null)
-          return texCache[i]
+        const getTex = async (i) => {
+          if (!liquid) return null
+          const image = parts[i].media.querySelector('[data-project-image]')
+          if (!image) {
+            console.error(`Missing project preview element for ${WORKS[i].name}`)
+            return null
+          }
+
+          try {
+            await waitForImage(image)
+            if (!texCache[i]) {
+              texCache[i] = liquid.makeTexture(image)
+              if (!texCache[i]) throw new Error(`Failed to create texture for ${WORKS[i].name}`)
+            }
+            return texCache[i]
+          } catch (error) {
+            texCache[i] = null
+            console.error(error)
+            return null
+          }
         }
 
         const paint = (now, dt) => {
@@ -452,6 +480,10 @@ const Works = () => {
 
           if (canvas && liquid && tex) {
             if (hover > 0.002) {
+              if ((inside || hover > 0.02) && now - lastTextureUpdate >= 66) {
+                liquid.updateTexture(tex)
+                lastTextureUpdate = now
+              }
               liquid.draw(tex, { mx: mx.v, my: my.v, vx, vy, hover, time: (now / 1000) % 1000 })
               canvas.style.opacity = '1'
             } else {
@@ -509,6 +541,7 @@ const Works = () => {
           }
           cur = parts[i]
           tex = null
+          lastTextureUpdate = 0
           ptr.inside = false
           hover = 0
           vx = 0
@@ -535,6 +568,9 @@ const Works = () => {
             card.dataset.active = k === i ? 'true' : 'false'
             if (k === i) card.setAttribute('aria-current', 'true')
             else card.removeAttribute('aria-current')
+            card
+              .querySelector('[data-project-image]')
+              ?.setAttribute('src', k === i ? WORKS[k].image : WORKS[k].poster)
           })
           bind(i)
         }
@@ -773,12 +809,14 @@ const Works = () => {
                     >
                         <div aria-hidden="true" className="absolute inset-0 z-0">
                           <NextImage
-                            src={work.image}
+                            src={work.poster}
                             alt=""
                             fill
                             sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 50vw"
+                            unoptimized
                             draggable={false}
                             className="size-full object-contain"
+                            data-project-image=""
                           />
                         </div>
 

@@ -7,6 +7,7 @@ import HeroSection from './components/HeroSection'
 import StackSection from './components/StackSection'
 import Doodle from './components/Doodle'
 import Works from './components/Works'
+import Pricing from './components/Pricing'
 
 export default function Home() {
   const heroRef = useRef(null)
@@ -24,6 +25,7 @@ export default function Home() {
       </div>
       <Doodle />
       <Works />
+      <Pricing />
     </div>
   )
 }

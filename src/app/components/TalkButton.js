@@ -2,7 +2,14 @@
 
 import { useEffect, useRef } from 'react'
 
-const TalkButton = () => {
+const TalkButton = ({
+  label = "Let's Talk",
+  href = 'mailto:',
+  buttonClassName,
+  fillClassName = 'bg-[#ff5500]',
+  labelClassName = '',
+  arrowClassName = '',
+}) => {
   const buttonRef = useRef(null)
   const fillRef = useRef(null)
   const textRef = useRef(null)
@@ -172,7 +179,8 @@ const TalkButton = () => {
   return (
     <a
       ref={buttonRef}
-      href="mailto:"
+      href={href}
+      aria-label={label}
       onPointerEnter={(event) => {
         if (event.pointerType !== 'mouse') return
         animateRevealRef.current = animateReveal
@@ -187,19 +195,19 @@ const TalkButton = () => {
       onFocus={(event) => animateReveal(event, true)}
       onBlur={(event) => animateReveal(event, false)}
       onPointerMove={followPointer}
-      className="group relative isolate mt-8 inline-flex h-12 items-center gap-3 overflow-hidden rounded-full bg-[#111111] py-1 pl-6 pr-1 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff5500]"
+      className={buttonClassName ?? "group relative isolate mt-8 inline-flex h-12 items-center gap-3 overflow-hidden rounded-full bg-[#111111] py-1 pl-6 pr-1 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff5500]"}
     >
       <span
         ref={fillRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 rounded-full bg-[#ff5500]"
+        className={`pointer-events-none absolute inset-0 z-0 rounded-full ${fillClassName}`}
         style={{ clipPath: 'circle(0px at 50% 50%)' }}
       />
-      <span ref={textRef} className="relative z-10">Let&apos;s Talk</span>
+      <span ref={textRef} className={`relative z-10 ${labelClassName}`}>{label}</span>
       <span
         ref={arrowRef}
         aria-hidden="true"
-        className="relative z-10 flex size-10 items-center justify-center rounded-full bg-[#ff5500] text-lg text-white"
+        className={`relative z-10 flex size-10 items-center justify-center rounded-full bg-[#ff5500] text-lg text-white ${arrowClassName}`}
       >
         ↗
       </span>
