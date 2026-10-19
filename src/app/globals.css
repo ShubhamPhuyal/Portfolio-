@@ -40,3 +40,77 @@ h5,
 h6 {
   font-family: var(--font-geist-sans), sans-serif;
 }
+
+.works-panel {
+  min-height: 100svh;
+}
+
+.works-panel.is-pinned {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100svh;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.works-viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+
+.works-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.works-panel.is-pinned .works-viewport {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  overflow: hidden;
+}
+
+.works-track {
+  position: relative;
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding-inline: clamp(1rem, 5vw, 5rem);
+}
+
+.works-card {
+  flex: 0 0 min(86vw, 880px);
+  transform-origin: center;
+  will-change: scale, opacity;
+}
+
+.works-card:not(:last-child) {
+  margin-right: clamp(-6rem, -5vw, -2rem);
+}
+
+@keyframes footer-sticker-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-17deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(17deg);
+  }
+}
+
+.footer-sticker {
+  animation: footer-sticker-float 4.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-sticker {
+    animation: none;
+  }
+}
