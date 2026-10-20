@@ -8,24 +8,55 @@ import Image from 'next/image'
 const SocialIcon = ({ label }) => {
   if (label === 'Instagram') {
     return (
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-[19px]" stroke="currentColor" strokeWidth="1.8">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        className="size-[19px]"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
         <rect x="3" y="3" width="18" height="18" rx="5" />
         <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none" />
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r="0.75"
+          fill="currentColor"
+          stroke="none"
+        />
       </svg>
     )
   }
 
   if (label === 'LinkedIn') {
     return (
-      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-[19px]" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        className="size-[19px]"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M6 9v9M6 6h.01M10 18v-5a4 4 0 0 1 8 0v5M10 9v9" />
       </svg>
     )
   }
 
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-[19px]" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="size-[19px]"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8A26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8Z" />
       <path d="m10 15 5-3-5-3v6Z" />
     </svg>
@@ -38,14 +69,95 @@ const FooterLabel = ({ children }) => (
   </p>
 )
 
-const FooterLink = ({ href, children }) => (
-  <a
-    href={href}
-    className="block max-w-full text-center text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6] transition-opacity hover:opacity-75"
-  >
-    {children}
-  </a>
-)
+const smoothScrollTo = (href) => {
+  const id = href.replace('#', '')
+  const target = document.getElementById(id)
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+/* Organic wave navigation link */
+const FooterLink = ({ href, children, openInNewTab }) => {
+  const waveRef = useRef(null)
+  const isAnimating = useRef(false)
+  const timeoutRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
+  const handleLetterEnter = (index) => {
+    const wave = waveRef.current
+
+    if (!wave || isAnimating.current) return
+
+    isAnimating.current = true
+
+    wave.style.setProperty('--h', index)
+    wave.classList.add('is-animating')
+
+    const maxDist = Math.max(
+      index,
+      wave.children.length - 1 - index
+    )
+
+    const totalTime = (0.8 + maxDist * 0.04) * 1000
+
+    timeoutRef.current = setTimeout(() => {
+      wave.classList.remove('is-animating')
+      isAnimating.current = false
+      timeoutRef.current = null
+    }, totalTime + 50)
+  }
+
+  const isAnchor = href.startsWith('#')
+
+  if (isAnchor) {
+    return (
+      <button
+        type="button"
+        ref={waveRef}
+        onClick={() => smoothScrollTo(href)}
+        className="organic-wave max-w-full text-center text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6] cursor-pointer bg-transparent border-none p-0"
+      >
+        {String(children).split('').map((character, index) => (
+          <span
+            key={`${character}-${index}`}
+            style={{ '--i': index }}
+            onMouseEnter={() => handleLetterEnter(index)}
+          >
+            {character === ' ' ? '\u00a0' : character}
+          </span>
+        ))}
+      </button>
+    )
+  }
+
+  return (
+    <a
+      href={href}
+      ref={waveRef}
+      target={openInNewTab ? '_blank' : undefined}
+      rel={openInNewTab ? 'noopener noreferrer' : undefined}
+      className="organic-wave max-w-full text-center text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6]"
+    >
+      {String(children).split('').map((character, index) => (
+        <span
+          key={`${character}-${index}`}
+          style={{ '--i': index }}
+          onMouseEnter={() => handleLetterEnter(index)}
+        >
+          {character === ' ' ? '\u00a0' : character}
+        </span>
+      ))}
+    </a>
+  )
+}
 
 const Footer = () => {
   const eyeRefs = useRef([])
@@ -67,16 +179,32 @@ const Footer = () => {
       if (!eye) return
 
       const bounds = eye.getBoundingClientRect()
-      const deltaX = event.clientX - (bounds.left + bounds.width / 2)
-      const deltaY = event.clientY - (bounds.top + bounds.height / 2)
-      const maxX = Math.max((bounds.width - pupil.offsetWidth) / 2 - 1, 0)
-      const maxY = Math.max((bounds.height - pupil.offsetHeight) / 2 - 1, 0)
+      const deltaX =
+        event.clientX - (bounds.left + bounds.width / 2)
+      const deltaY =
+        event.clientY - (bounds.top + bounds.height / 2)
+
+      const maxX = Math.max(
+        (bounds.width - pupil.offsetWidth) / 2 - 1,
+        0
+      )
+      const maxY = Math.max(
+        (bounds.height - pupil.offsetHeight) / 2 - 1,
+        0
+      )
+
       const safeX = maxX || 1
       const safeY = maxY || 1
-      const distance = Math.hypot(deltaX / safeX, deltaY / safeY)
+
+      const distance = Math.hypot(
+        deltaX / safeX,
+        deltaY / safeY
+      )
+
       const scale = distance > 1 ? 1 / distance : 1
 
-      pupil.style.transform = `translate(${deltaX * scale}px, ${deltaY * scale}px)`
+      pupil.style.transform =
+        `translate(${deltaX * scale}px, ${deltaY * scale}px)`
     })
   }
 
@@ -100,14 +228,20 @@ const Footer = () => {
         if (!element) return
 
         const bounds = element.getBoundingClientRect()
-        const deltaX = pointerX - (bounds.left + bounds.width / 2)
-        const deltaY = pointerY - (bounds.top + bounds.height / 2)
+
+        const deltaX =
+          pointerX - (bounds.left + bounds.width / 2)
+        const deltaY =
+          pointerY - (bounds.top + bounds.height / 2)
+
         const distance = Math.hypot(deltaX, deltaY)
         const strength = Math.max(0, 1 - distance / 150)
+
         const offsetX = deltaX * strength * 0.18
         const offsetY = deltaY * strength * 0.18
 
-        element.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${1 + strength * 0.2})`
+        element.style.transform =
+          `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${1 + strength * 0.2})`
       })
     })
   }
@@ -144,12 +278,25 @@ const Footer = () => {
     <footer
       onPointerMove={followPointer}
       onPointerLeave={resetEyes}
-      className="mx-6 mt-auto mb-6 flex min-h-[36rem] w-[calc(100%-3rem)] flex-col items-center overflow-hidden rounded-[24px] bg-[#ff5500] px-5 pt-8 pb-0 text-center text-[#f0ebe6] sm:px-10 sm:pt-10 lg:px-14"
+      className="relative mx-6 mt-auto mb-6 flex min-h-[36rem] w-[calc(100%-3rem)] flex-col items-center overflow-hidden rounded-[24px] bg-[#ff5500] px-5 pt-8 pb-0 text-center text-[#f0ebe6] sm:px-10 sm:pt-10 lg:px-14"
       style={{ fontFamily: 'var(--font-epilogue), Arial, sans-serif' }}
     >
+      {/* Background doodle */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none opacity-75"
+      >
+        <img
+          src="/doodle.svg"
+          alt=""
+          draggable={false}
+          className="h-full w-full object-cover object-center"
+        />
+      </div>
+
       {/* Top header */}
-      <div className="flex w-full items-center justify-between">
-        {/* Eye logo on the left */}
+      <div className="relative z-10 flex w-full items-center justify-between">
+        {/* Eye logo */}
         <Link
           href="/"
           aria-label="Shubham's portfolio home"
@@ -170,7 +317,7 @@ const Footer = () => {
           ))}
         </Link>
 
-        {/* Social icons on the right */}
+        {/* Social icons */}
         <div className="flex items-center gap-2">
           {socialLinks.map(({ label, href }) => (
             <a
@@ -188,7 +335,7 @@ const Footer = () => {
       </div>
 
       {/* Main footer content */}
-      <div className="mt-12 grid w-full grid-cols-1 justify-items-center gap-10 sm:grid-cols-2 sm:gap-12 lg:mt-16 lg:grid-cols-3 lg:gap-8">
+      <div className="relative z-10 mt-12 grid w-full grid-cols-1 justify-items-center gap-10 sm:grid-cols-2 sm:gap-12 lg:mt-16 lg:grid-cols-3 lg:gap-8">
         {/* Contact */}
         <section
           aria-labelledby="footer-contact"
@@ -200,18 +347,15 @@ const Footer = () => {
             id="footer-contact"
             className="text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6]"
           >
-            Let's talk
+            Let&apos;s talk
           </h2>
 
-          <a
-            href="mailto:"
-            className="mt-1 inline-block max-w-full break-words text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6] underline decoration-1 underline-offset-4 transition-opacity hover:opacity-75"
-          >
+          <FooterLink href="mailto:your-shubhamphuyal1234@gmail.com">
             Send me an email ↗
-          </a>
+          </FooterLink>
 
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#f0ebe6]/85">
-            Have a project in mind? I'd love to hear from you.
+            Have a project in mind? I&apos;d love to hear from you.
           </p>
         </section>
 
@@ -222,7 +366,7 @@ const Footer = () => {
         >
           <FooterLabel>explore</FooterLabel>
           <FooterLink href="#work">Work</FooterLink>
-          <FooterLink href="#playground">Playground</FooterLink>
+          <FooterLink href="#design-process">Design Process</FooterLink>
         </nav>
 
         {/* About navigation */}
@@ -232,20 +376,35 @@ const Footer = () => {
         >
           <FooterLabel>more</FooterLabel>
           <FooterLink href="#about">About</FooterLink>
-          <FooterLink href="#cv">CV</FooterLink>
+          <FooterLink href="/Shubham Phuyal_CV.pdf" openInNewTab>CV</FooterLink>
         </nav>
       </div>
 
       {/* Animated name and stickers */}
       <div
-        className="relative mt-auto h-[clamp(2.7rem,13.5vw,279px)] w-full overflow-hidden"
+        className="relative z-10 mt-auto h-[clamp(2.7rem,13.5vw,279px)] w-full overflow-hidden"
         onPointerMove={followNamePointer}
         onPointerLeave={resetName}
       >
         {[
-          { src: '/stickers/Frame%201.png', width: 332, height: 424, left: 10.7 },
-          { src: '/stickers/Frame%202.png', width: 415, height: 384, left: 43 },
-          { src: '/stickers/Frame%203.png', width: 354, height: 430, left: 85 },
+          {
+            src: '/stickers/Frame%201.png',
+            width: 332,
+            height: 424,
+            left: 10.7,
+          },
+          {
+            src: '/stickers/Frame%202.png',
+            width: 415,
+            height: 384,
+            left: 43,
+          },
+          {
+            src: '/stickers/Frame%203.png',
+            width: 354,
+            height: 430,
+            left: 85,
+          },
         ].map(({ src, width, height, left }, index) => (
           <span
             key={index}

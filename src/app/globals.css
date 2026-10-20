@@ -106,6 +106,7 @@ h6 {
 }
 
 @keyframes footer-sticker-float {
+
   0%,
   100% {
     transform: translateY(0) rotate(-17deg);
@@ -122,6 +123,70 @@ h6 {
 
 @media (prefers-reduced-motion: reduce) {
   .footer-sticker {
+    animation: none;
+  }
+}
+
+/* Nav glide position transitions from center to right side */
+.nav-top-pos {
+  transform: translateX(-50%);
+}
+
+.nav-scrolled-pos {
+  transform: translateX(calc(50vw - 100% - 0.75rem));
+}
+
+@media (min-width: 640px) {
+  .nav-scrolled-pos {
+    transform: translateX(calc(50vw - 100% - 1.5rem));
+  }
+}
+
+/* Organic wave hover animation for footer navigation */
+.organic-wave {
+  display: inline-flex;
+  cursor: pointer;
+  --h: -999;
+  --spread: 25;
+}
+
+.organic-wave span {
+  display: inline-block;
+  white-space: pre;
+
+  /* Distance from the hovered character */
+  --d: max(calc(var(--i) - var(--h)),
+      calc(var(--h) - var(--i)));
+
+  /* Wave attenuation */
+  --raw-factor: calc(max(0, var(--spread) - var(--d)) / var(--spread));
+
+  --factor: calc(var(--raw-factor) * var(--raw-factor));
+}
+
+.organic-wave.is-animating span {
+  animation: organic-wave-anim 0.8s forwards;
+  animation-delay: calc(var(--d) * 0.04s);
+}
+
+@keyframes organic-wave-anim {
+  0% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  35% {
+    transform: translateY(calc(-24px * var(--factor)));
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .organic-wave.is-animating span {
     animation: none;
   }
 }

@@ -179,9 +179,9 @@ function createLiquid(canvas) {
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
 
   const U = {}
-  ;['uTex', 'uMouse', 'uVel', 'uHover', 'uTime', 'uScale', 'uAspect'].forEach((n) => {
-    U[n] = gl.getUniformLocation(prog, n)
-  })
+    ;['uTex', 'uMouse', 'uVel', 'uHover', 'uTime', 'uScale', 'uAspect'].forEach((n) => {
+      U[n] = gl.getUniformLocation(prog, n)
+    })
   gl.uniform1i(U.uTex, 0)
 
   return {
@@ -575,7 +575,7 @@ const Works = () => {
           bind(i)
         }
 
-        let cleanupPointer = () => {}
+        let cleanupPointer = () => { }
 
         if (fine) {
           canvas = document.createElement('canvas')
@@ -755,16 +755,16 @@ const Works = () => {
       ref={sectionRef}
       id="work"
       aria-labelledby="works-heading"
-      className="bg-[#f7eee7]"
+      className="bg-[#0d0d0d]"
     >
       <div
         ref={panelRef}
-        className="flex h-svh flex-col justify-center overflow-hidden bg-[#f7eee7] pt-24 pb-8 sm:pt-28"
+        className="flex h-svh flex-col justify-center overflow-hidden bg-[#0d0d0d] pt-4 pb-4 sm:pt-6 sm:pb-6"
       >
-        <div className="mx-auto mb-2 flex w-full max-w-360 justify-center px-4 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto mb-10 flex w-full max-w-360 justify-center px-4 text-center sm:px-6 lg:px-8">
           <h2
             id="works-heading"
-            className="text-4xl font-semibold tracking-[-0.06em] text-[#111111] sm:text-6xl"
+            className="text-[36px] font-semibold tracking-[-0.06em] text-white sm:text-[72px]"
             style={{ fontFamily: '"Mdnichrometest Dark", Arial, sans-serif' }}
           >
             Featured works
@@ -807,25 +807,25 @@ const Works = () => {
                         backgroundColor: work.markColor,
                       }}
                     >
-                        <div aria-hidden="true" className="absolute inset-0 z-0">
-                          <NextImage
-                            src={work.poster}
-                            alt=""
-                            fill
-                            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 50vw"
-                            unoptimized
-                            draggable={false}
-                            className="size-full object-contain"
-                            data-project-image=""
-                          />
-                        </div>
-
-                        {/* light that follows the pointer */}
-                        <div
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_var(--sx,50%)_var(--sy,50%),rgba(255,255,255,0.22),transparent_55%)]"
-                          style={{ opacity: 'var(--shine, 0)' }}
+                      <div aria-hidden="true" className="absolute inset-0 z-0">
+                        <NextImage
+                          src={work.poster}
+                          alt=""
+                          fill
+                          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 50vw"
+                          unoptimized
+                          draggable={false}
+                          className="size-full object-contain"
+                          data-project-image=""
                         />
+                      </div>
+
+                      {/* light that follows the pointer */}
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_var(--sx,50%)_var(--sy,50%),rgba(255,255,255,0.22),transparent_55%)]"
+                        style={{ opacity: 'var(--shine, 0)' }}
+                      />
                     </div>
                   </div>
 
@@ -838,10 +838,10 @@ const Works = () => {
                       {work.mark}
                     </span>
                     <div className="min-w-0">
-                      <h3 className="truncate text-base font-bold tracking-[-0.04em] text-[#111111] sm:text-lg">
+                      <h3 className="truncate text-base font-bold tracking-[-0.04em] text-white sm:text-lg">
                         {work.name}
                       </h3>
-                      <p className="mt-0.5 text-xs font-semibold text-[#ff5500] sm:text-sm">
+                      <p className="mt-0.5 text-xs font-semibold text-white/70 sm:text-sm">
                         {work.category}
                       </p>
                     </div>
