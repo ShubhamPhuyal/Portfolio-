@@ -359,7 +359,7 @@ export default function ServiceCards() {
           end: () => `+=${(cards.length - 1) * (window.innerHeight * 0.7)}`,
           pin: true,
           pinSpacing: true,
-          scrub: 0.6,
+          scrub: true,
           anticipatePin: 1,
         },
       })

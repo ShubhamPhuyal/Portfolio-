@@ -100,10 +100,12 @@ const StackSection = ({ heroRef, cardRef }) => {
       heroRef.current?.style.setProperty('--hero-y', `${cardProgress * -28}svh`)
 
       // Only promote the card to its own compositing layer while it is moving.
-      // Once it has settled, a permanent will-change forces the text to be
-      // re-rasterized on every color change, which makes letters look shifty.
       if (cardRef?.current) {
-        cardRef.current.style.willChange = cardProgress < 1 ? 'transform' : 'auto'
+        const nextWillChange = cardProgress < 1 ? 'transform' : 'auto'
+        if (cardRef.current._willChange !== nextWillChange) {
+          cardRef.current._willChange = nextWillChange
+          cardRef.current.style.willChange = nextWillChange
+        }
       }
 
       const letters = paragraphRef.current?.querySelectorAll('[data-reveal-letter]')
@@ -116,54 +118,72 @@ const StackSection = ({ heroRef, cardRef }) => {
       const isLine5Read = reducedMotion.matches || (revealFront >= line5Index + WAVE_WIDTH * 0.5)
 
       if (chip1Ref.current) {
-        chip1Ref.current.style.opacity = isLine3Read ? '1' : '0'
-        chip1Ref.current.style.transform = isLine3Read
-          ? `scale(1) rotate(${CHIP_1_ROTATION})`
-          : `scale(0) rotate(${CHIP_1_ROTATION})`
+        const nextOp = isLine3Read ? '1' : '0'
+        if (chip1Ref.current._op !== nextOp) {
+          chip1Ref.current._op = nextOp
+          chip1Ref.current.style.opacity = nextOp
+          chip1Ref.current.style.transform = isLine3Read
+            ? `scale(1) rotate(${CHIP_1_ROTATION})`
+            : `scale(0) rotate(${CHIP_1_ROTATION})`
+        }
       }
 
       if (chip2Ref.current) {
-        chip2Ref.current.style.opacity = isLine5Read ? '1' : '0'
-        chip2Ref.current.style.transform = isLine5Read
-          ? `scale(1) rotate(${CHIP_2_ROTATION})`
-          : `scale(0) rotate(${CHIP_2_ROTATION})`
+        const nextOp = isLine5Read ? '1' : '0'
+        if (chip2Ref.current._op !== nextOp) {
+          chip2Ref.current._op = nextOp
+          chip2Ref.current.style.opacity = nextOp
+          chip2Ref.current.style.transform = isLine5Read
+            ? `scale(1) rotate(${CHIP_2_ROTATION})`
+            : `scale(0) rotate(${CHIP_2_ROTATION})`
+        }
       }
 
       letters?.forEach((letter, index) => {
         if (reducedMotion.matches) {
-          letter.style.color = '#111111'
+          if (letter._color !== '#111111') {
+            letter._color = '#111111'
+            letter.style.color = '#111111'
+          }
           return
         }
 
         const dist = revealFront - index // positive = ahead of wave front
 
+        let color
         if (dist >= WAVE_WIDTH) {
-          // Fully revealed — rich dark
-          letter.style.color = '#111111'
+          color = '#111111'
         } else if (dist > 0) {
-          // Inside the wave gradient
-          const t = dist / WAVE_WIDTH // 0 (just entering) → 1 (fully revealed)
+          const t = dist / WAVE_WIDTH // 0 -> 1
 
-          // 3-stop colour ramp, matching two26.studio richness:
-          // t=0 → light peach/cream  →  t=0.35 → vivid orange  →  t=0.7 → deep orange-red  →  t=1 → dark #111
-          let color
+          // Fast direct RGB interpolation matching rich two26 palette:
+          // t=0 (#f5c0a0: 245, 192, 160) -> t=0.35 (#ff5500: 255, 85, 0)
+          // -> t=0.70 (#c93b00: 201, 59, 0) -> t=1 (#111111: 17, 17, 17)
           if (t < 0.35) {
-            // peach → vivid orange
             const p = t / 0.35
-            color = `color-mix(in srgb, #ff5500 ${Math.round(p * 100)}%, #f5c0a0)`
+            const r = Math.round(245 + p * 10)
+            const g = Math.round(192 - p * 107)
+            const b = Math.round(160 - p * 160)
+            color = `rgb(${r},${g},${b})`
           } else if (t < 0.70) {
-            // vivid orange → deep burnt orange
             const p = (t - 0.35) / 0.35
-            color = `color-mix(in srgb, #c93b00 ${Math.round(p * 100)}%, #ff5500)`
+            const r = Math.round(255 - p * 54)
+            const g = Math.round(85 - p * 26)
+            color = `rgb(${r},${g},0)`
           } else {
-            // deep burnt → near-black
             const p = (t - 0.70) / 0.30
-            color = `color-mix(in srgb, #111111 ${Math.round(p * 100)}%, #c93b00)`
+            const r = Math.round(201 - p * 184)
+            const g = Math.round(59 - p * 42)
+            const b = Math.round(p * 17)
+            color = `rgb(${r},${g},${b})`
           }
-          letter.style.color = color
         } else {
-          // Not yet reached — dim peach/unread colour
-          letter.style.color = '#e8c5ae'
+          color = '#e8c5ae'
+        }
+
+        if (letter._color !== color) {
+          letter._color = color
+          letter.style.color = color
         }
       })
     }
@@ -218,7 +238,7 @@ const StackSection = ({ heroRef, cardRef }) => {
       id="about"
       ref={sectionRef}
       aria-label="Selected work"
-      className="relative z-20 -mt-[100svh] h-[215svh] sm:h-[362.5svh]"
+      className="relative z-20 -mt-[100svh] h-[312svh] sm:h-[362.5svh]"
     >
       <article
         ref={cardRef}

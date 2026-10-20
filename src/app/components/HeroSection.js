@@ -332,7 +332,23 @@ const HeroSection = ({ motionRef, cardRef }) => {
     window.addEventListener('touchend', handleTouchEnd, touchOptions)
     window.addEventListener('touchcancel', handleTouchEnd, touchOptions)
 
+    let isIntersecting = true
+    const observer = new IntersectionObserver(([entry]) => {
+      const was = isIntersecting
+      isIntersecting = entry.isIntersecting
+      if (!was && isIntersecting) {
+        lastTime = performance.now()
+        if (!frameId) frameId = requestAnimationFrame(tick)
+      }
+    }, { threshold: 0 })
+    observer.observe(stageAnchor)
+
     const tick = (time) => {
+      if (!isIntersecting) {
+        frameId = 0
+        return
+      }
+
       const delta = Math.min(time - lastTime, physicsStep * maxPhysicsSteps)
       lastTime = time
       frameDelta = delta
@@ -371,6 +387,7 @@ const HeroSection = ({ motionRef, cardRef }) => {
     window.addEventListener('resize', handleResize)
 
     return () => {
+      observer.disconnect()
       cancelAnimationFrame(frameId)
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('mousemove', mouse.mousemove)

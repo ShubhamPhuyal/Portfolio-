@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className="relative">
       <Header />
-      <div className="relative isolate flow-root h-[215svh] sm:h-[362.5svh]">
+      <div className="relative isolate flow-root h-[312svh] sm:h-[362.5svh]">
         <div className="sticky top-0 z-0 flex h-svh flex-col">
           <div aria-hidden="true" className="h-16 shrink-0 sm:h-24" />
           <HeroSection motionRef={heroRef} cardRef={cardRef} />
