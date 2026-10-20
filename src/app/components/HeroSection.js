@@ -106,7 +106,7 @@ const TAG_ICONS = {
 const TagIcon = ({ name }) => (
   <svg
     aria-hidden="true"
-    className="size-5 shrink-0"
+    className="size-3.5 sm:size-5 shrink-0"
     viewBox="0 0 16 16"
     fill="none"
     stroke="currentColor"
@@ -409,7 +409,7 @@ const HeroSection = ({ motionRef, cardRef }) => {
     <>
       <main
         ref={motionRef}
-        className="relative flex min-h-0 flex-1 flex-col items-center px-4 pt-8 sm:pt-10"
+        className="relative flex min-h-0 flex-1 flex-col items-center px-4 pt-4 sm:pt-10"
         style={{ transform: 'translate3d(0, var(--hero-y, 0), 0)', willChange: 'transform' }}
       >
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-20 bottom-0 z-0 overflow-hidden sm:-top-24">
@@ -422,31 +422,17 @@ const HeroSection = ({ motionRef, cardRef }) => {
           />
         </div>
         <div className="relative z-10 flex flex-col items-center text-center">
-          <p className="flex items-center gap-2 text-base text-zinc-500">
+          <p className="flex items-center gap-2 text-sm sm:text-base text-zinc-500">
             Hello
 
             I&apos;m
           </p>
 
-          {/*
-          <h1
-            className="mt-4 max-w-5xl text-[32px] leading-[1.05] font-semibold tracking-[-0.04em] text-[#111111] sm:mt-5 sm:text-[80px] sm:leading-[1] sm:tracking-[-1px]"
-            style={{ fontFamily: '"Mdnichrometest", Arial, sans-serif' }}
-          >
-            I&apos;m a Product &amp; Visual
-            <br />
-            designer crafting <span
-              className={`inline-block text-[#ff5500] transition-[opacity,transform] duration-300 ease-in-out motion-reduce:transition-none ${isFeaturedWordVisible ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0'}`}
-              style={{ fontFamily: '"Flux Variable", sans-serif' }}
-            >{featuredWord}</span> experiences.
-          </h1>
-          */}
-
           {/* Looping image header: all frames stacked in one grid cell, instantly swapped (no transition) */}
           <div
             role="img"
             aria-label="Shubham, Product and Visual designer"
-            className="mt-4 grid w-full max-w-5xl place-items-center sm:mt-5"
+            className="mt-3 grid w-full max-w-5xl place-items-center sm:mt-5"
           >
             {HEADER_IMAGES.map((src, index) => (
               // eslint-disable-next-line @next/next/no-img-element
@@ -456,16 +442,16 @@ const HeroSection = ({ motionRef, cardRef }) => {
                 alt=""
                 draggable={false}
                 loading="eager"
-                className={`col-start-1 row-start-1 h-auto max-h-[200px] w-full select-none object-contain sm:max-h-[320px] ${index === activeHeaderIndex ? 'opacity-100' : 'opacity-0'
+                className={`col-start-1 row-start-1 h-auto max-h-[160px] xs:max-h-[190px] sm:max-h-[320px] w-full select-none object-contain ${index === activeHeaderIndex ? 'opacity-100' : 'opacity-0'
                   }`}
               />
             ))}
           </div>
 
-          {<p className="mt-2 max-w-md text-base leading-[1.55] text-zinc-500">
+          <p className="mt-2 max-w-md px-2 text-sm sm:text-base leading-[1.5] sm:leading-[1.55] text-zinc-500">
             Currently designing <strong className="font-semibold text-zinc-700">complex B2B workflows</strong>
             <br className="hidden sm:block" /> and a <strong className="font-semibold text-zinc-700">multi-brand design system</strong>
-          </p>}
+          </p>
         </div>
 
         <div
@@ -487,7 +473,7 @@ const HeroSection = ({ motionRef, cardRef }) => {
               type="button"
               aria-label={`${tag.label}. Use the arrow keys to move.`}
               onKeyDown={(event) => moveTagWithKeyboard(event, index)}
-              className="pointer-events-auto absolute left-0 top-0 flex h-13.5 touch-none select-none items-center gap-3 whitespace-nowrap rounded-full px-5 font-mono text-base font-medium text-[#151515] opacity-0 shadow-[0_1px_2px_rgba(0,0,0,0.04)] outline-none focus-visible:ring-2 focus-visible:ring-black/60"
+              className="pointer-events-auto absolute left-0 top-0 flex h-9 sm:h-13.5 touch-none select-none items-center gap-1.5 sm:gap-3 whitespace-nowrap rounded-full px-3 sm:px-5 font-mono text-xs sm:text-base font-medium text-[#151515] opacity-0 shadow-[0_1px_2px_rgba(0,0,0,0.04)] outline-none focus-visible:ring-2 focus-visible:ring-black/60"
               style={{ backgroundColor: tag.color, cursor: 'grab', willChange: 'transform' }}
             >
               <span>{tag.label}</span>

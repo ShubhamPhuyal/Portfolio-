@@ -195,7 +195,7 @@ const TalkButton = ({
       onFocus={(event) => animateReveal(event, true)}
       onBlur={(event) => animateReveal(event, false)}
       onPointerMove={followPointer}
-      className={buttonClassName ?? "group relative isolate mt-8 inline-flex h-12 items-center gap-3 overflow-hidden rounded-full bg-[#111111] py-1 pl-6 pr-1 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff5500]"}
+      className={buttonClassName ?? "group relative isolate mt-6 sm:mt-8 inline-flex h-11 sm:h-12 items-center gap-2.5 sm:gap-3 overflow-hidden rounded-full bg-[#111111] py-1 pl-5 sm:pl-6 pr-1 text-xs sm:text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff5500]"}
     >
       <span
         ref={fillRef}
@@ -207,7 +207,7 @@ const TalkButton = ({
       <span
         ref={arrowRef}
         aria-hidden="true"
-        className={`relative z-10 flex size-10 items-center justify-center rounded-full bg-[#ff5500] text-lg text-white ${arrowClassName}`}
+        className={`relative z-10 flex size-9 sm:size-10 items-center justify-center rounded-full bg-[#ff5500] text-base sm:text-lg text-white ${arrowClassName}`}
       >
         ↗
       </span>

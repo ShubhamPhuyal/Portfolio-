@@ -228,13 +228,13 @@ const StackSection = ({ heroRef, cardRef }) => {
           transform: 'translate3d(0, var(--card-y, 100svh), 0)',
         }}
       >
-        <div className="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:px-10 sm:py-10 lg:px-14">
-          <p className="mb-5 text-base font-medium tracking-[-0.04em] text-black sm:mb-10 sm:text-[19px] sm:tracking-[-1px]">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 text-center sm:px-10 sm:py-10 lg:px-14">
+          <p className="mb-3 text-xs tracking-wider uppercase font-semibold text-zinc-600 sm:mb-10 sm:text-[19px] sm:tracking-[-1px] sm:font-medium sm:text-black">
             A BIT ABOUT ME
           </p>
           <p
             ref={paragraphRef}
-            className="relative mx-auto max-w-6xl text-[26px] leading-[1.15] font-extrabold tracking-[-0.05em] sm:text-[38px] sm:leading-[1.08] sm:tracking-[-0.055em] lg:text-[57px] lg:leading-[1.05]"
+            className="relative mx-auto max-w-6xl text-[34px] leading-[1.22] font-extrabold tracking-[-0.04em] xs:text-[23px] sm:text-[38px] sm:leading-[1.08] sm:tracking-[-0.055em] lg:text-[57px] lg:leading-[1.05]"
             style={{
               fontFamily: '"Mdnichrometest Dark", Arial, sans-serif',
               ...STABLE_TEXT_STYLE,
@@ -247,7 +247,7 @@ const StackSection = ({ heroRef, cardRef }) => {
             <span
               ref={chip1Ref}
               aria-hidden="true"
-              className="pointer-events-none absolute right-[5%] top-[13%] z-10 inline-flex select-none items-center rounded-full bg-[#ff5500] px-3 py-0.5 text-[12px] font-semibold tracking-normal text-white sm:right-[10%] sm:top-[14%] sm:px-3.5 sm:py-1 sm:text-[14px] md:right-[14%] md:top-[15%] md:text-[16px] lg:right-[17%] lg:top-[16%] lg:px-4 lg:py-1.5 lg:text-[16px]"
+              className="pointer-events-none absolute hidden sm:inline-flex select-none items-center rounded-full bg-[#ff5500] sm:right-[10%] sm:top-[14%] sm:px-3.5 sm:py-1 sm:text-[14px] md:right-[14%] md:top-[15%] md:text-[16px] lg:right-[17%] lg:top-[16%] lg:px-4 lg:py-1.5 lg:text-[16px] font-semibold tracking-normal text-white"
               style={{
                 fontFamily: 'var(--font-geist-sans), Arial, sans-serif',
                 fontWeight: 400,
@@ -266,7 +266,7 @@ const StackSection = ({ heroRef, cardRef }) => {
             <span
               ref={chip2Ref}
               aria-hidden="true"
-              className="pointer-events-none absolute bottom-[14%] left-[2%] z-10 inline-flex select-none items-center rounded-full bg-[#ff5500] px-3 py-0.5 text-[12px] font-semibold tracking-normal text-white sm:bottom-[13%] sm:left-[4%] sm:px-3.5 sm:py-1 sm:text-[14px] md:bottom-[12%] md:left-[6%] md:text-[16px] lg:bottom-[11%] lg:left-[8%] lg:px-4 lg:py-1.5 lg:text-[16px]"
+              className="pointer-events-none absolute hidden sm:inline-flex select-none items-center rounded-full bg-[#ff5500] sm:bottom-[13%] sm:left-[4%] sm:px-3.5 sm:py-1 sm:text-[14px] md:bottom-[12%] md:left-[6%] md:text-[16px] lg:bottom-[11%] lg:left-[8%] lg:px-4 lg:py-1.5 lg:text-[16px] font-semibold tracking-normal text-white"
               style={{
                 fontFamily: 'var(--font-geist-sans), Arial, sans-serif',
                 fontWeight: 400,

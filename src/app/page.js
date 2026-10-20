@@ -19,7 +19,7 @@ export default function Home() {
       <Header />
       <div className="relative isolate flow-root h-[362.5svh]">
         <div className="sticky top-0 z-0 flex h-svh flex-col">
-          <div aria-hidden="true" className="h-20 shrink-0 sm:h-24" />
+          <div aria-hidden="true" className="h-16 shrink-0 sm:h-24" />
           <HeroSection motionRef={heroRef} cardRef={cardRef} />
         </div>
         <StackSection heroRef={heroRef} cardRef={cardRef} />

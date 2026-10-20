@@ -262,7 +262,7 @@ const Header = () => {
     <header className="fixed inset-x-0 top-0 z-50 w-full pointer-events-none">
       {/* Morphing Nav Shell — seamlessly collapses from center full bar to right-side menu button */}
       <div
-        className={`pointer-events-auto absolute top-5 left-1/2 flex items-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+        className={`pointer-events-auto absolute top-3 sm:top-5 left-1/2 flex items-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
           isAtTop ? 'nav-top-pos' : 'nav-scrolled-pos'
         }`}
       >
@@ -272,9 +272,9 @@ const Header = () => {
             href="/"
             aria-label="Home"
             tabIndex={isAtTop ? 0 : -1}
-            className={`flex size-10 shrink-0 items-center justify-center rounded-full border border-[#AFAFB1] bg-[#F4F4F5] text-sm font-semibold text-zinc-900 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none sm:size-14 ${
+            className={`flex size-9 sm:size-14 shrink-0 items-center justify-center rounded-full border border-[#AFAFB1] bg-[#F4F4F5] text-xs sm:text-sm font-semibold text-zinc-900 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
               isAtTop
-                ? 'scale-100 opacity-100 max-w-[56px] mr-2'
+                ? 'scale-100 opacity-100 max-w-[56px] mr-1.5 sm:mr-2'
                 : 'scale-50 opacity-0 max-w-0 mr-0 p-0 border-0 pointer-events-none overflow-hidden'
             }`}
           >
@@ -287,7 +287,7 @@ const Header = () => {
             aria-hidden={!isAtTop}
             className={`flex items-center gap-0.5 rounded-full border border-[#AFAFB1] bg-[#F4F4F5] p-1 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none sm:gap-1.5 sm:p-1.5 overflow-hidden ${
               isAtTop
-                ? 'scale-100 opacity-100 max-w-[600px] mr-2'
+                ? 'scale-100 opacity-100 max-w-[600px] mr-1.5 sm:mr-2'
                 : 'scale-90 opacity-0 max-w-0 mr-0 p-0 border-0 pointer-events-none'
             }`}
           >
@@ -297,10 +297,17 @@ const Header = () => {
                 type="button"
                 tabIndex={isAtTop ? 0 : -1}
                 onClick={() => handleNavClick(item.href)}
-                className="flex items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-2 text-xs text-zinc-800 transition-colors hover:bg-white/80 sm:gap-2 sm:px-3 sm:py-2.5 sm:text-sm"
+                className="flex items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-1.5 text-xs text-zinc-800 transition-colors hover:bg-white/80 sm:gap-2 sm:px-3 sm:py-2.5 sm:text-sm"
               >
                 <NavIcon>{item.icon}</NavIcon>
-                {item.label}
+                {item.label === 'Design Process' ? (
+                  <>
+                    <span className="sm:hidden">Process</span>
+                    <span className="hidden sm:inline">Design Process</span>
+                  </>
+                ) : (
+                  item.label
+                )}
               </button>
             ))}
           </nav>
@@ -339,7 +346,7 @@ const Header = () => {
                 setMenuOpen((open) => !open)
               }
             }}
-            className={`relative flex size-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full border text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-95 sm:size-[60px] ${
+            className={`relative flex size-[38px] shrink-0 items-center justify-center overflow-hidden rounded-full border text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-95 sm:size-[60px] ${
               isAtTop
                 ? 'border-[#AFAFB1] bg-[#ff5500] shadow-sm'
                 : 'border-[#ff5500] bg-[#ff5500] shadow-lg'

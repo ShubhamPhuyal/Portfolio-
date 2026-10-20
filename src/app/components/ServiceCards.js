@@ -246,6 +246,8 @@ function StickerIcon({ type }) {
 export default function ServiceCards() {
   const containerRef = useRef(null)
   const cardsRef = useRef([])
+  const mobileCardsRef = useRef([])
+  const mobileCardBodiesRef = useRef([])
   const [hoveredIdx, setHoveredIdx] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -330,6 +332,54 @@ export default function ServiceCards() {
     })
   }, [hoveredIdx, isMobile])
 
+  // Mobile/Tablet smooth sticky stacking animation
+  useEffect(() => {
+    const mm = gsap.matchMedia()
+
+    mm.add(`(max-width: ${DESKTOP_BREAKPOINT - 1}px)`, () => {
+      const cardBodies = mobileCardBodiesRef.current.filter(Boolean)
+      const cardWrappers = mobileCardsRef.current.filter(Boolean)
+
+      if (cardBodies.length < 2) return
+
+      const triggers = []
+
+      // As next card scrolls up, smoothly scale down and slightly dim previous card
+      for (let i = 0; i < cardBodies.length - 1; i++) {
+        const currentBody = cardBodies[i]
+        const nextWrapper = cardWrappers[i + 1]
+
+        if (!currentBody || !nextWrapper) continue
+
+        const trigger = ScrollTrigger.create({
+          trigger: nextWrapper,
+          start: 'top 85%',
+          end: `top ${70 + (i + 1) * 16 + 80}px`,
+          scrub: 0.5,
+          onUpdate: (self) => {
+            const p = self.progress
+            const scale = 1 - p * 0.05
+            const brightness = 1 - p * 0.08
+            gsap.set(currentBody, {
+              scale,
+              filter: `brightness(${brightness})`,
+            })
+          },
+        })
+        triggers.push(trigger)
+      }
+
+      return () => {
+        triggers.forEach((t) => t.kill())
+        cardBodies.forEach((body) => {
+          gsap.set(body, { scale: 1, filter: 'none' })
+        })
+      }
+    })
+
+    return () => mm.revert()
+  }, [])
+
   const handlePointerMove = (e, index) => {
     if (isMobile) return
     const card = cardsRef.current[index]
@@ -353,15 +403,15 @@ export default function ServiceCards() {
     <section
       id="design-process"
       ref={containerRef}
-      className="relative w-full overflow-hidden select-none"
+      className="relative w-full overflow-visible xl:overflow-hidden select-none"
       style={{ backgroundColor: '#f7eee7' }}
     >
-      <div className="mx-auto max-w-7xl flex flex-col items-center px-4 sm:px-6 md:px-10 pt-20 lg:pt-28 pb-[110px] lg:pb-[142px]">
+      <div className="mx-auto max-w-7xl flex flex-col items-center px-4 sm:px-6 md:px-10 pt-12 sm:pt-20 lg:pt-28 pb-14 sm:pb-[110px] lg:pb-[142px]">
 
         {/* Section heading — same spacing & style as Pricing / Works sections */}
         <div className="w-full text-center">
           <h2
-            className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.06em]"
+            className="text-3xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.06em]"
             style={{ fontFamily: '"Mdnichrometest Dark", Arial, sans-serif', color: '#111111' }}
           >
             Design Process
@@ -461,72 +511,71 @@ export default function ServiceCards() {
         </div>
 
         {/* ------------------------------------------------------------------ */}
-        {/* MOBILE / TABLET: Vertical flow of all 5 cards                       */}
+        {/* MOBILE / TABLET: Vertical sticky card stack                         */}
         {/* ------------------------------------------------------------------ */}
-        <div className="flex xl:hidden flex-wrap items-start justify-center gap-14 w-full max-w-5xl">
-          {CARDS_DATA.map((card) => (
-            <div
-              key={card.id}
-              className="relative w-full max-w-[340px] cursor-pointer transition-transform duration-300 active:scale-95"
-              style={{ marginTop: '44px' }}
-            >
-              {/* Sticker overhangs top */}
-              <div className="absolute pointer-events-none" style={{ top: '-36px', right: '12px', zIndex: 30 }}>
-                <StickerIcon type={card.sticker} />
-              </div>
+        <div className="flex xl:hidden flex-col items-center w-full max-w-md mx-auto relative mt-4">
+          {CARDS_DATA.map((card, index) => {
+            const topOffset = 70 + index * 16
+            const isLast = index === CARDS_DATA.length - 1
 
+            return (
               <div
-                className="relative flex flex-col rounded-[18px]"
+                key={card.id}
+                ref={(el) => { mobileCardsRef.current[index] = el }}
+                className="sticky w-full max-w-[340px] will-change-transform"
                 style={{
-                  backgroundColor: card.bg,
-                  color: card.text,
-                  padding: '34px 28px',
+                  top: `${topOffset}px`,
+                  zIndex: index + 10,
+                  marginBottom: isLast ? '0px' : '40vh',
                 }}
               >
-                <h3
-                  className="leading-[1.1] tracking-tight"
-                  style={{
-                    fontFamily: 'var(--font-epilogue), sans-serif',
-                    fontSize: 'clamp(28px, 6.5vw, 32px)',
-                    lineHeight: '1.1',
-                    fontWeight: 700,
-                    marginTop: '24px',
-                  }}
-                >
-                  {card.title}
-                </h3>
+                {/* Sticker overhangs top */}
+                <div className="absolute pointer-events-none -top-7 sm:-top-9 right-3 z-30 scale-90 sm:scale-100 origin-top-right">
+                  <StickerIcon type={card.sticker} />
+                </div>
 
                 <div
-                  className="w-full"
+                  ref={(el) => { mobileCardBodiesRef.current[index] = el }}
+                  className="relative flex flex-col rounded-[20px] p-6 sm:p-7 md:p-8 shadow-[-2px_-4px_18px_rgba(0,0,0,0.06),0_12px_28px_rgba(0,0,0,0.12)] border border-black/10 transition-shadow"
                   style={{
-                    height: '1.5px',
-                    margin: '16px 0',
-                    backgroundColor: 'rgba(0,0,0,0.14)',
+                    backgroundColor: card.bg,
+                    color: card.text,
+                    transformOrigin: 'top center',
                   }}
-                />
+                >
+                  <h3
+                    className="leading-[1.1] tracking-tight mt-4 sm:mt-6 text-2xl sm:text-3xl font-bold"
+                    style={{
+                      fontFamily: 'var(--font-epilogue), sans-serif',
+                    }}
+                  >
+                    {card.title}
+                  </h3>
 
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {card.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-[10px]"
-                      style={{
-                        color: card.text,
-                        fontSize: 'clamp(17px, 4vw, 20px)',
-                        lineHeight: '1.3',
-                        fontWeight: 500,
-                      }}
-                    >
-                      <span style={{ color: card.bulletColor, fontSize: '14px', flexShrink: 0, marginTop: '3px' }}>✦</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <div
+                    className="w-full my-3 sm:my-4 h-[1.5px] bg-black/15"
+                  />
 
-                <div className="pointer-events-none absolute inset-0 rounded-[18px] ring-1 ring-inset ring-white/15" />
+                  <ul className="flex flex-col gap-2 sm:gap-2.5">
+                    {card.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2 sm:gap-2.5 text-base sm:text-lg font-medium leading-snug"
+                        style={{
+                          color: card.text,
+                        }}
+                      >
+                        <span style={{ color: card.bulletColor, fontSize: '14px', flexShrink: 0, marginTop: '2px' }}>✦</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="pointer-events-none absolute inset-0 rounded-[20px] ring-1 ring-inset ring-white/15" />
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>

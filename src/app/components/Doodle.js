@@ -36,7 +36,7 @@ const Doodle = () => {
   return (
     <section
       aria-label="Design philosophy"
-      className="relative z-30 -mt-12 isolate flex h-[clamp(314px,28vw,560px)] w-full items-center overflow-hidden"
+      className="relative z-30 -mt-8 sm:-mt-12 isolate flex h-[clamp(210px,26vw,314px)] sm:h-[clamp(314px,28vw,560px)] w-full items-center overflow-hidden"
       style={{ backgroundColor: '#f7eee7' }}
     >
       <svg

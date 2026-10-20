@@ -123,7 +123,7 @@ const FooterLink = ({ href, children, openInNewTab }) => {
         type="button"
         ref={waveRef}
         onClick={() => smoothScrollTo(href)}
-        className="organic-wave max-w-full text-center text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6] cursor-pointer bg-transparent border-none p-0"
+        className="organic-wave max-w-full text-left sm:text-center text-[24px] leading-[30px] sm:text-[34px] sm:leading-[40px] lg:text-[43px] lg:leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6] cursor-pointer bg-transparent border-none p-0"
       >
         {String(children).split('').map((character, index) => (
           <span
@@ -144,7 +144,7 @@ const FooterLink = ({ href, children, openInNewTab }) => {
       ref={waveRef}
       target={openInNewTab ? '_blank' : undefined}
       rel={openInNewTab ? 'noopener noreferrer' : undefined}
-      className="organic-wave max-w-full text-center text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6]"
+      className="organic-wave max-w-full text-left sm:text-center text-[24px] leading-[30px] sm:text-[34px] sm:leading-[40px] lg:text-[43px] lg:leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6]"
     >
       {String(children).split('').map((character, index) => (
         <span
@@ -335,17 +335,17 @@ const Footer = () => {
       </div>
 
       {/* Main footer content */}
-      <div className="relative z-10 mt-12 grid w-full grid-cols-1 justify-items-center gap-10 sm:grid-cols-2 sm:gap-12 lg:mt-16 lg:grid-cols-3 lg:gap-8">
+      <div className="relative z-10 mt-8 sm:mt-12 lg:mt-16 grid w-full grid-cols-1 justify-items-start sm:justify-items-center gap-8 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3 lg:gap-8">
         {/* Contact */}
         <section
           aria-labelledby="footer-contact"
-          className="flex max-w-full flex-col items-center text-center"
+          className="flex max-w-full flex-col items-start text-left sm:items-center sm:text-center"
         >
           <FooterLabel>contact</FooterLabel>
 
           <h2
             id="footer-contact"
-            className="text-[43px] leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6]"
+            className="text-left sm:text-center text-[26px] leading-[32px] sm:text-[36px] sm:leading-[42px] lg:text-[43px] lg:leading-[51px] font-black tracking-[-0.43px] text-[#f0ebe6]"
           >
             Let&apos;s talk
           </h2>
@@ -354,7 +354,7 @@ const Footer = () => {
             Send me an email ↗
           </FooterLink>
 
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#f0ebe6]/85">
+          <p className="mt-3 max-w-sm text-left sm:text-center text-xs sm:text-sm leading-relaxed text-[#f0ebe6]/85">
             Have a project in mind? I&apos;d love to hear from you.
           </p>
         </section>
@@ -362,7 +362,7 @@ const Footer = () => {
         {/* Work navigation */}
         <nav
           aria-label="Work navigation"
-          className="flex max-w-full flex-col items-center text-center"
+          className="flex max-w-full flex-col items-start text-left sm:items-center sm:text-center"
         >
           <FooterLabel>explore</FooterLabel>
           <FooterLink href="#work">Work</FooterLink>
@@ -372,7 +372,7 @@ const Footer = () => {
         {/* About navigation */}
         <nav
           aria-label="About navigation"
-          className="flex max-w-full flex-col items-center text-center"
+          className="flex max-w-full flex-col items-start text-left sm:items-center sm:text-center"
         >
           <FooterLabel>more</FooterLabel>
           <FooterLink href="#about">About</FooterLink>
@@ -382,7 +382,7 @@ const Footer = () => {
 
       {/* Animated name and stickers */}
       <div
-        className="relative z-10 mt-auto h-[clamp(2.7rem,13.5vw,279px)] w-full overflow-hidden"
+        className="relative z-10 mt-8 sm:mt-auto h-[64px] xs:h-[84px] sm:h-[clamp(2.7rem,13.5vw,279px)] w-full overflow-hidden"
         onPointerMove={followNamePointer}
         onPointerLeave={resetName}
       >
@@ -409,7 +409,7 @@ const Footer = () => {
           <span
             key={index}
             aria-hidden="true"
-            className="footer-sticker pointer-events-none absolute top-[35%] z-10"
+            className="footer-sticker pointer-events-none absolute top-[28%] sm:top-[35%] z-10"
             style={{
               left: `${left}%`,
               animationDelay: `${index * -0.8}s`,
@@ -423,13 +423,13 @@ const Footer = () => {
               alt=""
               width={width}
               height={height}
-              className="h-[130px] w-auto max-w-none object-contain"
+              className="h-[52px] xs:h-[72px] sm:h-[130px] w-auto max-w-none object-contain"
             />
           </span>
         ))}
 
         <h2
-          className="flex w-full cursor-default justify-center whitespace-nowrap text-center text-[clamp(3rem,15vw,180px)] leading-[1.5] font-black tracking-[-0.09em] text-[#f0ebe6]"
+          className="flex w-full cursor-default justify-center whitespace-nowrap text-center text-[clamp(2.4rem,13vw,180px)] sm:text-[clamp(3rem,15vw,180px)] leading-[1.3] sm:leading-[1.5] font-black tracking-[-0.09em] text-[#f0ebe6]"
           style={{ fontFamily: 'var(--font-epilogue), Arial, sans-serif' }}
         >
           {'Shubham Phuyal'.split('').map((character, index) => (

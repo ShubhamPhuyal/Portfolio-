@@ -305,16 +305,25 @@ const Works = () => {
 
     mm.add(
       {
+        isDesktop: '(min-width: 768px)',
         motion: '(prefers-reduced-motion: no-preference)',
         fine: '(hover: hover) and (pointer: fine)',
       },
       (ctx) => {
-        const { motion, fine } = ctx.conditions
+        const { isDesktop, motion, fine } = ctx.conditions
 
-        // Reduced motion: leave the native scroll-snap row alone.
-        if (!motion) {
+        // Mobile / tablet or reduced motion: use clean vertical page scroll.
+        if (!isDesktop || !motion) {
           viewport.dataset.mode = 'native'
-          return
+          cards.forEach((card, k) => {
+            card.dataset.active = 'true'
+            card.querySelector('[data-project-image]')?.setAttribute('src', WORKS[k].image)
+          })
+          return () => {
+            cards.forEach((card) => {
+              card.removeAttribute('data-active')
+            })
+          }
         }
         viewport.dataset.mode = 'pinned'
 
@@ -782,16 +791,16 @@ const Works = () => {
       ref={sectionRef}
       id="work"
       aria-labelledby="works-heading"
-      className="bg-[#0d0d0d]"
+      className="bg-[#0d0d0d] py-14 sm:py-20 md:py-0"
     >
       <div
         ref={panelRef}
-        className="flex h-svh flex-col justify-center overflow-hidden bg-[#0d0d0d] pt-4 pb-4 sm:pt-6 sm:pb-6"
+        className="relative flex flex-col items-center w-full bg-[#0d0d0d] md:h-svh md:justify-center md:overflow-hidden md:pt-6 md:pb-6"
       >
-        <div className="mx-auto mb-10 flex w-full max-w-360 justify-center px-4 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto mb-8 sm:mb-12 md:mb-10 flex w-full max-w-360 justify-center px-4 text-center sm:px-6 lg:px-8">
           <h2
             id="works-heading"
-            className="text-[36px] font-semibold tracking-[-0.06em] text-white sm:text-[72px]"
+            className="text-3xl sm:text-5xl md:text-[72px] font-semibold tracking-[-0.06em] text-white"
             style={{ fontFamily: '"Mdnichrometest Dark", Arial, sans-serif' }}
           >
             Featured works
@@ -801,11 +810,11 @@ const Works = () => {
         <div
           ref={viewportRef}
           data-mode="native"
-          className="w-full snap-x snap-mandatory overflow-x-auto py-8 data-[mode=pinned]:snap-none data-[mode=pinned]:overflow-hidden"
+          className="w-full data-[mode=pinned]:snap-none data-[mode=pinned]:overflow-hidden md:w-full md:snap-x md:snap-mandatory md:overflow-x-auto md:py-8"
         >
           <div
             ref={trackRef}
-            className="relative flex w-max items-start gap-[90px] px-4 will-change-transform sm:px-6 lg:px-8"
+            className="flex flex-col items-center gap-10 sm:gap-14 w-full max-w-2xl px-4 mx-auto md:relative md:flex-row md:w-max md:items-start md:gap-[90px] md:px-6 lg:px-8 md:will-change-transform md:max-w-none md:mx-0"
           >
             {WORKS.map((work, index) => (
               <article
@@ -815,9 +824,9 @@ const Works = () => {
                 ref={(element) => {
                   cardRefs.current[index] = element
                 }}
-                className="group/card shrink-0 snap-center [container-type:inline-size] [--card-vw:78vw] sm:[--card-vw:56vw] lg:[--card-vw:46vw]"
+                className="group/card w-full max-w-[560px] md:max-w-none md:w-[var(--card-calc-w)] md:shrink-0 md:snap-center [container-type:inline-size] md:[--card-vw:56vw] lg:[--card-vw:46vw]"
                 style={{
-                  width: `calc(max(240px, min(var(--card-vw), calc((100svh - 19rem) * ${PREVIEW_ASPECT_RATIO} - 20px), 860px)) + 20px)`,
+                  '--card-calc-w': `calc(max(240px, min(var(--card-vw), calc((100svh - 19rem) * ${PREVIEW_ASPECT_RATIO} - 20px), 860px)) + 20px)`,
                 }}
               >
                 <a
@@ -828,7 +837,7 @@ const Works = () => {
                   <div data-tilt className="will-change-transform">
                     <div
                       data-media
-                      className="relative w-full overflow-hidden [container-type:inline-size]"
+                      className="relative w-full overflow-hidden [container-type:inline-size] rounded-2xl md:rounded-none"
                       style={{
                         aspectRatio: PREVIEW_ASPECT_RATIO,
                         backgroundColor: '#141414',
@@ -836,10 +845,10 @@ const Works = () => {
                     >
                       <div aria-hidden="true" className="absolute inset-0 z-0">
                         <NextImage
-                          src={work.poster}
+                          src={work.image || work.poster}
                           alt=""
                           fill
-                          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 50vw"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 50vw"
                           unoptimized
                           draggable={false}
                           className="size-full object-contain"
@@ -856,10 +865,10 @@ const Works = () => {
                     </div>
                   </div>
 
-                  <div className="mt-4 flex items-center gap-3 sm:mt-5">
+                  <div className="mt-4 sm:mt-5 flex items-center gap-3">
                     <span
                       aria-hidden="true"
-                      className="flex size-10 shrink-0 items-center justify-center overflow-visible rounded-full text-base font-bold leading-none sm:size-12 sm:text-lg transition-transform duration-300 group-hover/card:scale-105"
+                      className="flex size-9 sm:size-12 shrink-0 items-center justify-center overflow-visible rounded-full text-sm sm:text-lg font-bold leading-none transition-transform duration-300 group-hover/card:scale-105"
                       style={{
                         backgroundColor: work.markColor || '#ffffff',
                         color: work.markTextColor || '#0d0d0d',
@@ -868,16 +877,16 @@ const Works = () => {
                       {work.mark}
                     </span>
                     <div className="min-w-0">
-                      <h3 className="truncate text-base font-bold tracking-[-0.04em] text-white sm:text-lg">
+                      <h3 className="truncate text-base sm:text-lg font-bold tracking-[-0.04em] text-white">
                         {work.name}
                       </h3>
-                      <p className="mt-0.5 text-xs font-semibold text-white/70 sm:text-sm">
+                      <p className="mt-0.5 truncate text-xs sm:text-sm font-semibold text-white/70">
                         {work.category}
                       </p>
                     </div>
                     <span
                       aria-hidden="true"
-                      className="ml-auto flex size-9 shrink-0 items-center justify-center rounded-full bg-[#ff5500] text-white sm:size-10"
+                      className="ml-auto flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-full bg-[#ff5500] text-white transition-transform duration-300 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
                     >
                       <ArrowIcon />
                     </span>
