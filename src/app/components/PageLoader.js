@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 
-const LOAD_DURATION = 3000
+const LOAD_DURATION = 3500
 // Pixel grid config
 const PIXEL_SIZE = 120 // px per pixel block
 const WAVE_DURATION = 800 // total wave sweep time (ms)
@@ -36,12 +36,15 @@ const PageLoader = () => {
     return () => window.clearInterval(imageInterval)
   }, [phase, showFlipAnimation])
 
-  // Loading progress
+  // Loading progress — smooth lerp so counter increments on every rAF frame
   useEffect(() => {
     let animationFrame
     let pageReady = document.readyState === 'complete'
     const startedAt = performance.now()
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    // Mutable float outside state — avoids stale closure and enables sub-integer lerping
+    let displayed = 0
+    let lastRendered = -1
 
     const markPageReady = () => {
       Promise.resolve(document.fonts?.ready).then(() => {
@@ -57,8 +60,20 @@ const PageLoader = () => {
 
     const updateProgress = (now) => {
       const elapsed = now - startedAt
-      const loadingProgress = Math.min(90, (elapsed / LOAD_DURATION) * 90)
-      setProgress(Math.floor(loadingProgress))
+      const t = Math.min(1, elapsed / LOAD_DURATION)
+      // Ease-in-out cubic: starts quick, slows near 90 so it feels natural
+      const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+      const target = eased * 90
+
+      // Exponential lerp: displayed chases target each frame — no integer jumps
+      displayed += (target - displayed) * 0.1
+      const rounded = Math.min(90, Math.round(displayed))
+
+      // Only re-render when the displayed integer actually changes
+      if (rounded !== lastRendered) {
+        lastRendered = rounded
+        setProgress(rounded)
+      }
 
       if (pageReady && elapsed >= LOAD_DURATION) {
         setProgress(100)
