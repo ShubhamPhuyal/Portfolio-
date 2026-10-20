@@ -262,15 +262,15 @@ const Footer = () => {
   const socialLinks = [
     {
       label: 'LinkedIn',
-      href: 'https://www.linkedin.com/',
+      href: 'https://www.linkedin.com/in/shubham-phuyal-10957b288/',
     },
     {
       label: 'Instagram',
-      href: 'https://www.instagram.com/',
+      href: 'https://www.instagram.com/ph.shubham/',
     },
     {
       label: 'YouTube',
-      href: 'https://www.youtube.com/',
+      href: 'https://www.youtube.com/@luckygamer8692',
     },
   ]
 
