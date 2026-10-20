@@ -351,7 +351,21 @@ const Footer = () => {
           </h2>
 
           <FooterLink href="mailto:your-shubhamphuyal1234@gmail.com">
-            Send me an email ↗
+            <span className="inline-flex items-center gap-1.5">
+              <span>Send me an email</span>
+              <svg
+                aria-hidden="true"
+                className="size-3.5 sm:size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M7 17 17 7M7 7h10v10" />
+              </svg>
+            </span>
           </FooterLink>
 
           <p className="mt-3 max-w-sm text-left sm:text-center text-xs sm:text-sm leading-relaxed text-[#f0ebe6]/85">

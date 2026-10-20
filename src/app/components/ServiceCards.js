@@ -246,6 +246,7 @@ function StickerIcon({ type }) {
 export default function ServiceCards() {
   const containerRef = useRef(null)
   const cardsRef = useRef([])
+  const mobilePinStageRef = useRef(null)
   const mobileCardsRef = useRef([])
   const mobileCardBodiesRef = useRef([])
   const [hoveredIdx, setHoveredIdx] = useState(null)
@@ -332,48 +333,64 @@ export default function ServiceCards() {
     })
   }, [hoveredIdx, isMobile])
 
-  // Mobile/Tablet smooth sticky stacking animation
+  // Mobile/Tablet pinned scroll-stacking animation
   useEffect(() => {
     const mm = gsap.matchMedia()
 
     mm.add(`(max-width: ${DESKTOP_BREAKPOINT - 1}px)`, () => {
+      const cards = mobileCardsRef.current.filter(Boolean)
       const cardBodies = mobileCardBodiesRef.current.filter(Boolean)
-      const cardWrappers = mobileCardsRef.current.filter(Boolean)
+      const stage = mobilePinStageRef.current
 
-      if (cardBodies.length < 2) return
+      if (!stage || cards.length < 2) return
 
-      const triggers = []
+      // Initial state: Card 0 is resting at y: 0. Cards 1..4 start offscreen below.
+      gsap.set(cards[0], { y: 0, scale: 1, autoAlpha: 1 })
+      for (let i = 1; i < cards.length; i++) {
+        gsap.set(cards[i], { y: window.innerHeight || 800, scale: 1, autoAlpha: 1 })
+      }
 
-      // As next card scrolls up, smoothly scale down and slightly dim previous card
-      for (let i = 0; i < cardBodies.length - 1; i++) {
-        const currentBody = cardBodies[i]
-        const nextWrapper = cardWrappers[i + 1]
+      // Pin the mobile stage right where the first card sits (top 75px)
+      // and do not scroll until all cards have stacked up smoothly.
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top 75px',
+          end: () => `+=${(cards.length - 1) * (window.innerHeight * 0.7)}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+        },
+      })
 
-        if (!currentBody || !nextWrapper) continue
+      for (let i = 1; i < cards.length; i++) {
+        const targetY = i * 16
 
-        const trigger = ScrollTrigger.create({
-          trigger: nextWrapper,
-          start: 'top 85%',
-          end: `top ${70 + (i + 1) * 16 + 80}px`,
-          scrub: 0.5,
-          onUpdate: (self) => {
-            const p = self.progress
-            const scale = 1 - p * 0.05
-            const brightness = 1 - p * 0.08
-            gsap.set(currentBody, {
-              scale,
-              filter: `brightness(${brightness})`,
-            })
-          },
+        tl.to(cards[i], {
+          y: targetY,
+          ease: 'power1.out',
+          duration: 1,
         })
-        triggers.push(trigger)
+
+        if (cardBodies[i - 1]) {
+          tl.to(
+            cardBodies[i - 1],
+            {
+              scale: 0.96,
+              filter: 'brightness(0.96)',
+              ease: 'power1.out',
+              duration: 1,
+            },
+            '<'
+          )
+        }
       }
 
       return () => {
-        triggers.forEach((t) => t.kill())
-        cardBodies.forEach((body) => {
-          gsap.set(body, { scale: 1, filter: 'none' })
-        })
+        tl.kill()
+        cards.forEach((c) => gsap.set(c, { clearProps: 'all' }))
+        cardBodies.forEach((b) => gsap.set(b, { clearProps: 'all' }))
       }
     })
 
@@ -511,22 +528,21 @@ export default function ServiceCards() {
         </div>
 
         {/* ------------------------------------------------------------------ */}
-        {/* MOBILE / TABLET: Vertical sticky card stack                         */}
+        {/* MOBILE / TABLET: Pinned stacking card deck                          */}
         {/* ------------------------------------------------------------------ */}
-        <div className="flex xl:hidden flex-col items-center w-full max-w-md mx-auto relative mt-4">
+        <div
+          ref={mobilePinStageRef}
+          className="flex xl:hidden flex-col items-center w-full max-w-[340px] mx-auto relative mt-4 min-h-[460px]"
+        >
           {CARDS_DATA.map((card, index) => {
-            const topOffset = 70 + index * 16
-            const isLast = index === CARDS_DATA.length - 1
-
             return (
               <div
                 key={card.id}
                 ref={(el) => { mobileCardsRef.current[index] = el }}
-                className="sticky w-full max-w-[340px] will-change-transform"
+                className="absolute inset-x-0 top-0 will-change-transform"
                 style={{
-                  top: `${topOffset}px`,
                   zIndex: index + 10,
-                  marginBottom: isLast ? '0px' : '40vh',
+                  transformOrigin: 'top center',
                 }}
               >
                 {/* Sticker overhangs top */}
@@ -536,7 +552,7 @@ export default function ServiceCards() {
 
                 <div
                   ref={(el) => { mobileCardBodiesRef.current[index] = el }}
-                  className="relative flex flex-col rounded-[20px] p-6 sm:p-7 md:p-8 shadow-[-2px_-4px_18px_rgba(0,0,0,0.06),0_12px_28px_rgba(0,0,0,0.12)] border border-black/10 transition-shadow"
+                  className="relative flex flex-col rounded-[20px] p-6 sm:p-7 md:p-8 shadow-none border-0"
                   style={{
                     backgroundColor: card.bg,
                     color: card.text,

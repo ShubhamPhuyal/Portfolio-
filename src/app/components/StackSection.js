@@ -218,23 +218,23 @@ const StackSection = ({ heroRef, cardRef }) => {
       id="about"
       ref={sectionRef}
       aria-label="Selected work"
-      className="relative z-20 -mt-[100svh] h-[362.5svh]"
+      className="relative z-20 -mt-[100svh] h-[390svh] sm:h-[362.5svh]"
     >
       <article
         ref={cardRef}
-        className="sticky top-0 flex h-svh w-full items-center overflow-hidden bg-[#f7eee7]"
+        className="sticky top-0 flex h-svh w-full items-center overflow-visible sm:overflow-hidden bg-[#f7eee7]"
         style={{
           clipPath: 'polygon(0 0, 100% 1.5%, 100% 100%, 0 100%)',
           transform: 'translate3d(0, var(--card-y, 100svh), 0)',
         }}
       >
-        <div className="mx-auto w-full max-w-7xl px-4 py-6 text-center sm:px-10 sm:py-10 lg:px-14">
-          <p className="mb-3 text-xs tracking-wider uppercase font-semibold text-zinc-600 sm:mb-10 sm:text-[19px] sm:tracking-[-1px] sm:font-medium sm:text-black">
+        <div className="mx-auto w-full max-w-7xl px-4 py-2 text-center sm:px-10 sm:py-10 lg:px-14">
+          <p className="mb-1 text-xs tracking-wider uppercase font-semibold text-zinc-600 sm:mb-10 sm:text-[19px] sm:tracking-[-1px] sm:font-medium sm:text-black">
             A BIT ABOUT ME
           </p>
           <p
             ref={paragraphRef}
-            className="relative mx-auto max-w-6xl text-[34px] leading-[1.22] font-extrabold tracking-[-0.04em] xs:text-[23px] sm:text-[38px] sm:leading-[1.08] sm:tracking-[-0.055em] lg:text-[57px] lg:leading-[1.05]"
+            className="relative mx-auto max-w-6xl text-[clamp(15px,4.3vw,21px)] leading-[1.24] font-extrabold tracking-[-0.035em] sm:text-[38px] sm:leading-[1.08] sm:tracking-[-0.055em] lg:text-[57px] lg:leading-[1.05]"
             style={{
               fontFamily: '"Mdnichrometest Dark", Arial, sans-serif',
               ...STABLE_TEXT_STYLE,
@@ -281,7 +281,7 @@ const StackSection = ({ heroRef, cardRef }) => {
               Nerding out on design
             </span>
           </p>
-          <TalkButton />
+          <TalkButton buttonClassName="group relative isolate mt-3.5 sm:mt-8 inline-flex h-10 sm:h-12 items-center gap-2 sm:gap-3 overflow-hidden rounded-full bg-[#111111] py-1 pl-4 sm:pl-6 pr-1 text-xs sm:text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff5500]" />
 
         </div>
       </article>

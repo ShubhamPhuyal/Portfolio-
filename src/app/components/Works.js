@@ -824,7 +824,7 @@ const Works = () => {
                 ref={(element) => {
                   cardRefs.current[index] = element
                 }}
-                className="group/card w-full max-w-[560px] md:max-w-none md:w-[var(--card-calc-w)] md:shrink-0 md:snap-center [container-type:inline-size] md:[--card-vw:56vw] lg:[--card-vw:46vw]"
+                className="group/card w-full max-w-[560px] md:max-w-none md:w-[var(--card-calc-w)] md:shrink-0 md:snap-center [container-type:inline-size] md:[--card-vw:56vw] lg:[--card-vw:46vw] rounded-none"
                 style={{
                   '--card-calc-w': `calc(max(240px, min(var(--card-vw), calc((100svh - 19rem) * ${PREVIEW_ASPECT_RATIO} - 20px), 860px)) + 20px)`,
                 }}
@@ -832,12 +832,12 @@ const Works = () => {
                 <a
                   href={work.href}
                   aria-label={`${work.name}, ${work.category}`}
-                  className="block outline-offset-8 focus-visible:outline-2 focus-visible:outline-[#ff5500]"
+                  className="block outline-offset-8 focus-visible:outline-2 focus-visible:outline-[#ff5500] rounded-none"
                 >
-                  <div data-tilt className="will-change-transform">
+                  <div data-tilt className="will-change-transform rounded-none">
                     <div
                       data-media
-                      className="relative w-full overflow-hidden [container-type:inline-size] rounded-2xl md:rounded-none"
+                      className="relative w-full overflow-hidden [container-type:inline-size] rounded-none"
                       style={{
                         aspectRatio: PREVIEW_ASPECT_RATIO,
                         backgroundColor: '#141414',

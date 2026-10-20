@@ -207,9 +207,20 @@ const TalkButton = ({
       <span
         ref={arrowRef}
         aria-hidden="true"
-        className={`relative z-10 flex size-9 sm:size-10 items-center justify-center rounded-full bg-[#ff5500] text-base sm:text-lg text-white ${arrowClassName}`}
+        className={`relative z-10 flex size-9 sm:size-10 items-center justify-center rounded-full bg-[#ff5500] text-white ${arrowClassName}`}
       >
-        ↗
+        <svg
+          aria-hidden="true"
+          className="size-4 sm:size-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M7 17 17 7M7 7h10v10" />
+        </svg>
       </span>
     </a>
   )

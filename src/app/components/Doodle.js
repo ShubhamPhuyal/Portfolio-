@@ -36,14 +36,13 @@ const Doodle = () => {
   return (
     <section
       aria-label="Design philosophy"
-      className="relative z-30 -mt-8 sm:-mt-12 isolate flex h-[clamp(210px,26vw,314px)] sm:h-[clamp(314px,28vw,560px)] w-full items-center overflow-hidden"
-      style={{ backgroundColor: '#f7eee7' }}
+      className="relative z-30 -mt-16 sm:-mt-12 isolate flex h-[clamp(240px,28vw,340px)] sm:h-[clamp(314px,28vw,560px)] w-full items-center overflow-hidden"
+      style={{ backgroundColor: '#0d0d0d' }}
     >
       <svg
         aria-hidden="true"
-        className="absolute left-1/2 h-auto w-[max(1000px,100vw)] max-w-none"
+        className="absolute left-1/2 h-auto w-[max(800px,100vw)] sm:w-[max(1000px,100vw)] max-w-none top-[18%] sm:top-[40%]"
         style={{
-          top: '40%',
           transform: 'translate(-50%, -50%)',
         }}
         viewBox="0 0 1600 400"
@@ -83,9 +82,15 @@ const Doodle = () => {
           </linearGradient>
         </defs>
 
-        {/* Filled black area below the wave curve — fills corners too, connects to Works */}
+        {/* Filled peach area above the wave curve — connects seamlessly to About section */}
         <path
-          d="M -200 800 L -200 100 C 300 100 380 324 800 324 C 1220 324 1300 100 1800 100 L 1800 800 Z"
+          d="M -200 -400 L -200 100 C 300 100 380 324 800 324 C 1220 324 1300 100 1800 100 L 1800 -400 Z"
+          fill="#f7eee7"
+        />
+
+        {/* Filled black area below the wave curve — connects directly into Works */}
+        <path
+          d="M -200 1200 L -200 100 C 300 100 380 324 800 324 C 1220 324 1300 100 1800 100 L 1800 1200 Z"
           fill="#0d0d0d"
         />
 
