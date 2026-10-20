@@ -22,9 +22,36 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import NextImage from 'next/image'
 
 const WORKS = [
-  { name: 'PROJECT ONE', category: 'PRODUCT DESIGN', mark: '1', markColor: '#f6d6e7', image: '/work/CPT2610191657-1667x763%20(1).gif', poster: '/work/CPT2610191657-1667x763%20(1).poster.png', href: '#' },
-  { name: 'PROJECT TWO', category: 'BRAND IDENTITY', mark: '2', markColor: '#315eea', image: '/work/CPT2610191658-1377x623%20(1).gif', poster: '/work/CPT2610191658-1377x623%20(1).poster.png', href: '#' },
-  { name: 'PROJECT THREE', category: 'DIGITAL EXPERIENCE', mark: '3', markColor: '#ff6a3d', image: '/work/CPT2610191659-1521x692%20(1).gif', poster: '/work/CPT2610191659-1521x692%20(1).poster.png', href: '#' },
+  {
+    name: 'Nest SMS',
+    category: 'Bulk SMS Service platform in Nepal',
+    mark: '1',
+    markColor: '#ffffff',
+    markTextColor: '#0d0d0d',
+    image: '/work/CPT2610191657-1667x763%20(1).gif',
+    poster: '/work/CPT2610191657-1667x763%20(1).poster.png',
+    href: '#',
+  },
+  {
+    name: 'Nest Nepal',
+    category: 'Hosting & Cloud Service provider in Nepal',
+    mark: '2',
+    markColor: '#ffffff',
+    markTextColor: '#0d0d0d',
+    image: '/work/CPT2610191658-1377x623%20(1).gif',
+    poster: '/work/CPT2610191658-1377x623%20(1).poster.png',
+    href: '#',
+  },
+  {
+    name: 'Skill Shikshya',
+    category: 'IT Training Institute in Nepal',
+    mark: '3',
+    markColor: '#ffffff',
+    markTextColor: '#0d0d0d',
+    image: '/work/CPT2610191659-1521x692%20(1).gif',
+    poster: '/work/CPT2610191659-1521x692%20(1).poster.png',
+    href: '#',
+  },
 ]
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
@@ -804,7 +831,7 @@ const Works = () => {
                       className="relative w-full overflow-hidden [container-type:inline-size]"
                       style={{
                         aspectRatio: PREVIEW_ASPECT_RATIO,
-                        backgroundColor: work.markColor,
+                        backgroundColor: '#141414',
                       }}
                     >
                       <div aria-hidden="true" className="absolute inset-0 z-0">
@@ -832,8 +859,11 @@ const Works = () => {
                   <div className="mt-4 flex items-center gap-3 sm:mt-5">
                     <span
                       aria-hidden="true"
-                      className="flex size-10 shrink-0 items-center justify-center overflow-visible rounded-full text-base font-bold leading-none text-white sm:size-12 sm:text-lg"
-                      style={{ backgroundColor: work.markColor }}
+                      className="flex size-10 shrink-0 items-center justify-center overflow-visible rounded-full text-base font-bold leading-none sm:size-12 sm:text-lg transition-transform duration-300 group-hover/card:scale-105"
+                      style={{
+                        backgroundColor: work.markColor || '#ffffff',
+                        color: work.markTextColor || '#0d0d0d',
+                      }}
                     >
                       {work.mark}
                     </span>
