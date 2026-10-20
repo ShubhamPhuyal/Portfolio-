@@ -74,8 +74,12 @@ const handleNavClick = (href) => {
 }
 
 const Header = () => {
-  const [isAtTop, setIsAtTop] = useState(true)
+  const [isAtTopRaw, setIsAtTopRaw] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // On mobile (< sm = 640px) always force the compact hamburger style
+  const isAtTop = isMobile ? false : isAtTopRaw
 
   const buttonRef = useRef(null)
   const fillRef = useRef(null)
@@ -233,8 +237,8 @@ const Header = () => {
   useEffect(() => {
     const updateHeader = () => {
       const atTop = window.scrollY < 20
-      setIsAtTop(atTop)
-      if (atTop) {
+      setIsAtTopRaw(atTop)
+      if (atTop && !isMobile) {
         setMenuOpen(false)
       }
     }
@@ -245,6 +249,13 @@ const Header = () => {
     return () => {
       window.removeEventListener('scroll', updateHeader)
     }
+  }, [isMobile])
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   useEffect(() => {
