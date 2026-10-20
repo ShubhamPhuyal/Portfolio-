@@ -378,7 +378,6 @@ export default function ServiceCards() {
             cardBodies[i - 1],
             {
               scale: 0.96,
-              filter: 'brightness(0.96)',
               ease: 'power1.out',
               duration: 1,
             },
@@ -421,7 +420,6 @@ export default function ServiceCards() {
       id="design-process"
       ref={containerRef}
       className="relative w-full overflow-visible xl:overflow-hidden select-none"
-      style={{ backgroundColor: '#f7eee7' }}
     >
       <div className="mx-auto max-w-7xl flex flex-col items-center px-4 sm:px-6 md:px-10 pt-12 sm:pt-20 lg:pt-28 pb-14 sm:pb-[110px] lg:pb-[142px]">
 

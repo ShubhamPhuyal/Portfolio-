@@ -218,11 +218,11 @@ const StackSection = ({ heroRef, cardRef }) => {
       id="about"
       ref={sectionRef}
       aria-label="Selected work"
-      className="relative z-20 -mt-[100svh] h-[390svh] sm:h-[362.5svh]"
+      className="relative z-20 -mt-[100svh] h-[215svh] sm:h-[362.5svh]"
     >
       <article
         ref={cardRef}
-        className="sticky top-0 flex h-svh w-full items-center overflow-visible sm:overflow-hidden bg-[#f7eee7]"
+        className="sticky top-0 flex h-svh w-full items-center overflow-visible sm:overflow-hidden"
         style={{
           clipPath: 'polygon(0 0, 100% 1.5%, 100% 100%, 0 100%)',
           transform: 'translate3d(0, var(--card-y, 100svh), 0)',
@@ -234,7 +234,7 @@ const StackSection = ({ heroRef, cardRef }) => {
           </p>
           <p
             ref={paragraphRef}
-            className="relative mx-auto max-w-6xl text-[clamp(15px,4.3vw,21px)] leading-[1.24] font-extrabold tracking-[-0.035em] sm:text-[38px] sm:leading-[1.08] sm:tracking-[-0.055em] lg:text-[57px] lg:leading-[1.05]"
+            className="relative mx-auto max-w-6xl text-[34px] leading-[1.15] font-extrabold tracking-[-0.035em] sm:text-[38px] sm:leading-[1.08] sm:tracking-[-0.055em] lg:text-[57px] lg:leading-[1.05]"
             style={{
               fontFamily: '"Mdnichrometest Dark", Arial, sans-serif',
               ...STABLE_TEXT_STYLE,

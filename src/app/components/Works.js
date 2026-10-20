@@ -837,9 +837,8 @@ const Works = () => {
                   <div data-tilt className="will-change-transform rounded-none">
                     <div
                       data-media
-                      className="relative w-full overflow-hidden [container-type:inline-size] rounded-none"
+                      className="relative w-full overflow-hidden [container-type:inline-size] rounded-none aspect-square md:aspect-[1902/864]"
                       style={{
-                        aspectRatio: PREVIEW_ASPECT_RATIO,
                         backgroundColor: '#141414',
                       }}
                     >
@@ -851,7 +850,7 @@ const Works = () => {
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 50vw"
                           unoptimized
                           draggable={false}
-                          className="size-full object-contain"
+                          className="size-full object-cover md:object-contain rounded-none"
                           data-project-image=""
                         />
                       </div>

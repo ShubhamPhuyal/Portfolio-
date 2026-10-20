@@ -35,8 +35,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${dancingScript.variable} ${epilogue.variable} ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#FAFAFA] text-[#171717]`}>
-      <body className="min-h-screen flex flex-col">
+    <html lang="en" className={`${bricolage.variable} ${dancingScript.variable} ${epilogue.variable} ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f7eee7] text-[#171717]`}>
+      <body className="min-h-screen flex flex-col bg-[#f7eee7]">
         {children}
         <Footer />
         <PageLoader />
