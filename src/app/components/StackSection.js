@@ -222,7 +222,7 @@ const StackSection = ({ heroRef, cardRef }) => {
     >
       <article
         ref={cardRef}
-        className="sticky top-0 flex h-svh w-full items-center overflow-visible sm:overflow-hidden"
+        className="sticky top-0 flex h-svh w-full items-center overflow-visible sm:overflow-hidden bg-[#f7eee7]"
         style={{
           clipPath: 'polygon(0 0, 100% 1.5%, 100% 100%, 0 100%)',
           transform: 'translate3d(0, var(--card-y, 100svh), 0)',
