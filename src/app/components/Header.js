@@ -74,12 +74,20 @@ const handleNavClick = (href) => {
 }
 
 const Header = () => {
-  const [isAtTopRaw, setIsAtTopRaw] = useState(true)
+  const [isAtTop, setIsAtTop] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  // On mobile (< sm = 640px) always force the compact hamburger style
-  const isAtTop = isMobile ? false : isAtTopRaw
+  useEffect(() => {
+    if (isMobile && menuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobile, menuOpen])
 
   const buttonRef = useRef(null)
   const fillRef = useRef(null)
@@ -237,7 +245,7 @@ const Header = () => {
   useEffect(() => {
     const updateHeader = () => {
       const atTop = window.scrollY < 20
-      setIsAtTopRaw(atTop)
+      setIsAtTop(atTop)
       if (atTop && !isMobile) {
         setMenuOpen(false)
       }
@@ -271,9 +279,120 @@ const Header = () => {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 w-full pointer-events-none">
-      {/* Morphing Nav Shell — seamlessly collapses from center full bar to right-side menu button */}
+      {/* ================================================================= */}
+      {/* MOBILE ONLY: Single orange menu button (visible when menu closed) */}
+      {/* ================================================================= */}
+      {!menuOpen && (
+        <button
+          type="button"
+          aria-label="Open navigation menu"
+          onClick={() => setMenuOpen(true)}
+          className="pointer-events-auto sm:hidden fixed top-4 right-4 z-40 flex size-11 items-center justify-center rounded-full bg-[#ff5500] text-white shadow-lg active:scale-95 transition-transform"
+        >
+          <span className="relative flex size-5 items-center justify-center">
+            <span className="absolute h-0.5 w-4 rounded-full bg-white -translate-y-[4.5px]" />
+            <span className="absolute h-0.5 w-4 rounded-full bg-white" />
+            <span className="absolute h-0.5 w-4 rounded-full bg-white translate-y-[4.5px]" />
+          </span>
+        </button>
+      )}
+
+      {/* ================================================================= */}
+      {/* MOBILE ONLY: Full-screen #f9e2e2 Menu Overlay (matching screenshot)*/}
+      {/* ================================================================= */}
+      {menuOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+          className="pointer-events-auto sm:hidden fixed inset-0 z-50 flex flex-col justify-between bg-[#f9e2e2] transition-opacity duration-200"
+        >
+          {/* Top right close button */}
+          <div className="flex items-center justify-end px-5 pt-5">
+            <button
+              type="button"
+              aria-label="Close navigation menu"
+              onClick={closeMenu}
+              className="flex size-11 items-center justify-center rounded-xl border-2 border-[#ff5500] bg-transparent text-[#ff5500] transition-transform active:scale-95"
+            >
+              <svg
+                className="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Menu items — stacked pills aligned to the right exactly like screenshot */}
+          <nav aria-label="Mobile navigation" className="flex flex-col items-end gap-3.5 px-6 pb-20">
+            <button
+              type="button"
+              onClick={() => { handleNavClick('#work'); closeMenu() }}
+              className="rounded-full bg-white px-8 py-3.5 text-[22px] font-semibold text-black shadow-sm transition-transform active:scale-95"
+            >
+              Work
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { handleNavClick('#about'); closeMenu() }}
+              className="rounded-full bg-white px-8 py-3.5 text-[22px] font-semibold text-black shadow-sm transition-transform active:scale-95"
+            >
+              About us
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { handleNavClick('#design-process'); closeMenu() }}
+              className="rounded-full bg-white px-8 py-3.5 text-[22px] font-semibold text-black shadow-sm transition-transform active:scale-95"
+            >
+              Design Process
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { handleNavClick('/Shubham Phuyal_CV.pdf'); closeMenu() }}
+              className="rounded-full bg-white px-8 py-3.5 text-[22px] font-semibold text-black shadow-sm transition-transform active:scale-95"
+            >
+              CV
+            </button>
+
+            {/* Black Let's Talk button with orange arrow circle */}
+            <a
+              href="mailto:shubhamphuyal77@gmail.com"
+              onClick={closeMenu}
+              className="flex items-center gap-3.5 rounded-full bg-black pl-7 pr-2 py-2 text-[20px] font-semibold text-white shadow-md transition-transform active:scale-95"
+            >
+              <span>Let&apos;s Talk</span>
+              <span className="flex size-10 items-center justify-center rounded-full bg-[#ff5500] text-white">
+                <svg
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M7 17 17 7M7 7h10v10" />
+                </svg>
+              </span>
+            </a>
+          </nav>
+        </div>
+      )}
+
+      {/* ================================================================= */}
+      {/* DESKTOP ONLY: Morphing Nav Shell                                  */}
+      {/* ================================================================= */}
       <div
-        className={`pointer-events-auto absolute top-3 sm:top-5 left-1/2 flex items-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+        className={`hidden sm:flex pointer-events-auto absolute top-3 sm:top-5 left-1/2 items-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
           isAtTop ? 'nav-top-pos' : 'nav-scrolled-pos'
         }`}
       >
@@ -482,13 +601,13 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Close menu when clicking outside the panel */}
+      {/* Close menu when clicking outside the panel (desktop only) */}
       {menuOpen && !isAtTop && (
         <button
           type="button"
           aria-label="Close navigation menu"
           onClick={closeMenu}
-          className="fixed inset-0 z-40 cursor-default"
+          className="hidden sm:block fixed inset-0 z-40 cursor-default"
         />
       )}
     </header>
